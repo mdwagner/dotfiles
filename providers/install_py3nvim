@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e
+
+python3 -m venv py3nvim
+source py3nvim/bin/activate
+python3 -m pip install pynvim
+deactivate
