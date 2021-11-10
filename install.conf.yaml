@@ -33,14 +33,7 @@
 
 - create:
   - ~/git
-  - ~/.config/fish
-  - ~/.config/nvim
-  - ~/.local/share/nvim/site/pack/packer/start
-
-- git:
-    ~/.local/share/nvim/site/pack/packer/start/packer.nvim:
-      url: https://github.com/wbthomason/packer.nvim
-      method: clone
+  - ~/.config
 
 - link:
     ~/.asdfrc:
