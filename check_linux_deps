@@ -2,7 +2,22 @@
 
 set -e
 
-if ! type fish &> /dev/null; then
-  echo "please install fish"
-  exit 1
-fi
+declare -a required_tools=("git" "curl" "apt")
+
+for tool in "${required_tools[@]}"; do
+  if ! type "$tool" &> /dev/null; then
+    echo "FAIL: Please install \`$tool\`"
+    exit 1
+  fi
+done
+
+
+# TODO: figure out later...
+declare -a required_deps=("asdf" "fish" "nvim" "node" "python3" "ruby")
+
+for dep in "${required_deps[@]}"; do
+  if ! type "$dep" &> /dev/null; then
+    echo "FAIL: Please \`sudo apt install $dep\`"
+    exit 1
+  fi
+done

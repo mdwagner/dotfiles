@@ -2,10 +2,21 @@
 
 set -e
 
-if ! type fish &> /dev/null; then
-  echo "please install fish"
-  exit 1
-else
-  echo "fish is installed"
-  echo "continuing..."
-fi
+declare -a required_tools=("git" "curl" "brew")
+
+for tool in "${required_tools[@]}"; do
+  if ! type "$tool" &> /dev/null; then
+    echo "FAIL: Please install \`$tool\`"
+    exit 1
+  fi
+done
+
+
+declare -a required_deps=("asdf" "fish" "nvim" "node" "python3" "ruby")
+
+for deps in "${required_deps[@]}"; do
+  if ! type "$deps" &> /dev/null; then
+    echo "FAIL: Please \`brew install $deps\`"
+    exit 1
+  fi
+done
