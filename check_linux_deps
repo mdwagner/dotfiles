@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e
+
+if ! type fish &> /dev/null; then
+  echo "please install fish"
+  exit 1
+fi

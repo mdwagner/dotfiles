@@ -9,19 +9,31 @@
 - clean: ['~']
 
 - ifmacos:
-  - brewfile:
-      file: Brewfile
+  - shell:
+    - command: ./check_macos_deps
+      stdout: true
+      stderr: true
+
+- ifanylinux:
+  - shell:
+    - command: ./check_linux_deps
+      stdout: true
+      stderr: true
+
+#- ifmacos:
+  #- brewfile:
+      #file: Brewfile
 
 - create:
   - ~/git
 
-- ifanylinux:
-  - shell:
-    - command: chsh -s $(which fish)
-      description: Making fish the default shell
+#- ifanylinux:
+  #- shell:
+    #- command: chsh -s $(which fish)
+      #description: Making fish the default shell
 
-- ifmacos:
-  - shell:
-    - command: which fish
-      stdout: true
-      description: Output fish location for later use...
+#- ifmacos:
+  #- shell:
+    #- command: which fish
+      #stdout: true
+      #description: Output fish location for later use...
