@@ -1,35 +1,8 @@
 - defaults:
     link:
       relink: true
-    brewfile:
-      stdout: false
-      stderr: false
-      include: ['tap', 'brew', 'cask', 'mas']
 
 - clean: ['~']
-
-- ifmacos:
-  - shell:
-    - command: ./check_macos_deps
-      description: Checking dependencies...
-      quiet: true
-      stdout: true
-      stderr: true
-  - brewfile:
-      file: Brewfile
-
-- ifanylinux:
-  - shell:
-    - command: ./check_linux_deps
-      description: Checking dependencies...
-      quiet: true
-      stdout: true
-      stderr: true
-  - git:
-      ~/.asdf:
-        url: https://github.com/asdf-vm/asdf.git
-        branch: v0.8.1
-        method: clone
 
 - create:
   - ~/git
@@ -39,8 +12,11 @@
     ~/.asdfrc:
     ~/.tool-versions:
     ~/.config/fish/functions/fish_prompt.fish:
+      path: config/fish/functions/fish_prompt.fish
       create: true
     ~/.config/fish/config.fish:
+      path: config/fish/config.fish
       create: true
     ~/.config/nvim/init.vim:
+      path: config/nvim/init.vim
       create: true

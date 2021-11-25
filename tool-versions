@@ -1,2 +1,9 @@
 awscli 2.2.31
-deno 1.15.3
+rust stable
+terraform 1.0.8
+crystal 1.2.2
+deno 1.16.3
+neovim 0.5.1
+python 3.8.12
+yarn 1.22.10
+nodejs 14.16.1

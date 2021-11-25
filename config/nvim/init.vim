@@ -71,6 +71,10 @@ set hidden
 set statusline+=%{fugitive#statusline()}
 set completeopt=menu,menuone,noselect
 set termguicolors
+if executable('rg')
+  set grepprg=rg\ --vimgrep
+  set grepformat^=%f:%l:%c:%m
+endif
 let mapleader=','
 let g:loaded_python_provider = 0
 let g:python3_host_prog = '~/.dotfiles/providers/py3nvim/bin/python'
@@ -83,7 +87,7 @@ let g:rooter_cd_cmd = 'lcd'
 let g:test#strategy = "neovim"
 let g:indent_blankline_show_first_indent_level = v:false
 syntax on
-colorscheme onedark
+silent! colorscheme onedark
 filetype on
 filetype indent on
 filetype plugin on
