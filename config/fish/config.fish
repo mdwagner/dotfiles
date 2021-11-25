@@ -9,6 +9,7 @@ switch (uname)
     end
     # asdf-vm
     source ~/.asdf/asdf.fish
+    set -g fish_user_paths $HOME"/.local/bin" $fish_user_paths
   case Darwin
     # asdf-vm
     source (brew --prefix asdf)"/libexec/asdf.fish"
