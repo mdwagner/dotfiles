@@ -1,0 +1,3 @@
+".local/share/fonts/cascadia-code":
+  type: archive
+  url: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/CascadiaCode.zip
