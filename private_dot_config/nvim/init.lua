@@ -52,9 +52,12 @@ vim.api.nvim_create_autocmd("WinNew", {
   end,
 })
 
-if not pcall(require, "plugins") then
+if not pcall(require, "wagz.plugins") then
 	print("No plugins found! Minimum config loaded...")
 	return
+else
+	print("Some plugins found! Minimum config loaded...")
+  return
 end
 
 -- Eager/One-time loaded plugins --

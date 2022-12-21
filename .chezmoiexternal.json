@@ -6,6 +6,81 @@
   },
   ".asdf/plugins/crystal": {
     "type": "archive",
-    "url": "https://github.com/asdf-community/asdf-crystal/archive/refs/heads/master.zip"
+    "url": "https://github.com/asdf-community/asdf-crystal/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/fonts/cascadia-code": {
+    "type": "archive",
+    "url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/CascadiaCode.zip"
+  },
+  ".local/share/nvim/site/pack/tpope/opt/vim-surround": {
+    "type": "archive",
+    "url": "https://github.com/tpope/vim-surround/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/nvim/site/pack/preservim/opt/nerdcommenter": {
+    "type": "archive",
+    "url": "https://github.com/preservim/nerdcommenter/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/nvim/site/pack/ntpeters/opt/vim-better-whitespace": {
+    "type": "archive",
+    "url": "https://github.com/ntpeters/vim-better-whitespace/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/nvim/site/pack/bling/opt/vim-airline": {
+    "type": "archive",
+    "url": "https://github.com/bling/vim-airline/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/nvim/site/pack/vim-airline/opt/vim-airline-themes": {
+    "type": "archive",
+    "url": "https://github.com/vim-airline/vim-airline-themes/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/nvim/site/pack/sickill/opt/vim-pasta": {
+    "type": "archive",
+    "url": "https://github.com/sickill/vim-pasta/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/nvim/site/pack/tpope/opt/vim-fugitive": {
+    "type": "archive",
+    "url": "https://github.com/tpope/vim-fugitive/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/nvim/site/pack/sbdchd/opt/neoformat": {
+    "type": "archive",
+    "url": "https://github.com/sbdchd/neoformat/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/nvim/site/pack/junegunn/opt/fzf": {
+    "type": "archive",
+    "url": "https://github.com/junegunn/fzf/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/nvim/site/pack/junegunn/opt/fzf.vim": {
+    "type": "archive",
+    "url": "https://github.com/junegunn/fzf.vim/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/nvim/site/pack/pbogut/opt/fzf-mru.vim": {
+    "type": "archive",
+    "url": "https://github.com/pbogut/fzf-mru.vim/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/nvim/site/pack/vim-test/opt/vim-test": {
+    "type": "archive",
+    "url": "https://github.com/vim-test/vim-test/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/nvim/site/pack/christoomey/opt/vim-tmux-navigator": {
+    "type": "archive",
+    "url": "https://github.com/christoomey/vim-tmux-navigator/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
+  },
+  ".local/share/nvim/site/pack/navarasu/opt/onedark.nvim": {
+    "type": "archive",
+    "url": "https://github.com/navarasu/onedark.nvim/archive/refs/heads/master.tar.gz",
+    "stripComponents": 1
   }
 }
