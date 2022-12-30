@@ -1,8 +1,14 @@
-# Setup $SHELL
+# $SHELL
 set -gx SHELL (which fish)
 
-# Setup ASDF
+# $GIT_EDITOR
+set -gx GIT_EDITOR (which nvim)
+
+# ASDF
 source ~/.asdf/asdf.fish
 
-# Setup 1Password completion
+# 1Password completion
 op completion fish | source
+
+# Deno
+set -gx DENO_NO_UPDATE_CHECK 1

@@ -51,6 +51,13 @@ vim.api.nvim_create_autocmd("WinNew", {
     vim.opt.foldenable = false
   end,
 })
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+  group = vim.api.nvim_create_augroup("BATS_BASH_EXT", {}),
+  pattern = "*.bats",
+  callback = function()
+    vim.opt.filetype = "bash"
+  end,
+})
 
 if not pcall(require, "wagz.plugins") then
 	print("No plugins found! Minimum config loaded...")
@@ -92,6 +99,8 @@ local dapui = require("dapui")
 local nvim_treesitter_configs = require("nvim-treesitter.configs")
 local session_manager = require("session_manager")
 local session_manager_config = require("session_manager.config")
+local null_ls = require("null-ls")
+--local navigator = require("navigator")
 
 -- VIM -> NVIM shortcuts --
 
@@ -168,10 +177,6 @@ if vim.fn.executable("rg") == 1 then
 	set.grepprg = "rg --vimgrep"
 	set.grepformat:prepend("%f:%l:%c:%m")
 end
-let_g.python3_host_prog = "~/py3nvim/bin/python3"
-let_g.loaded_ruby_provider = 0
-let_g.node_host_prog = "~/nodenvim/node_modules/.bin/neovim-node-host"
-let_g.loaded_perl_provider = 0
 let_g.airline_theme = "powerlineish"
 let_g.airline_powerline_fonts = 1
 let_g.rooter_cd_cmd = "lcd"
@@ -203,29 +208,22 @@ autocmd("FileType", {
 autocmd("BufWritePre", {
 	group = augroup("AUTOFORMAT", {}),
 	pattern = {
-		"*.js",
-		"*.jsx",
-		"*.mjs",
-		"*.ts",
-		"*.tsx",
-		"*.css",
-		"*.json",
-		"*.md",
-		"*.yml",
-		"*.yaml",
-		"*.html",
-		"*.lua",
-		"*.cr",
-		"*.zig",
+		--"*.js",
+		--"*.jsx",
+		--"*.mjs",
+		--"*.ts",
+		--"*.tsx",
+		--"*.css",
+		--"*.json",
+		--"*.md",
+		--"*.yml",
+		--"*.yaml",
+		--"*.html",
+    --"*.cr",
+		--"*.zig",
+    "*.lua",
 	},
 	command = "try | undojoin | Neoformat | catch /E790/ | Neoformat | endtry",
-})
-autocmd({ "BufEnter", "BufAdd", "BufNew", "BufNewFile", "BufWinEnter" }, {
-	group = augroup("TS_FOLD_WORKAROUND", {}),
-	callback = function()
-		set.foldmethod = "expr"
-		set.foldexpr = "nvim_treesitter#foldexpr()"
-	end,
 })
 
 vim.keymap.set("n", "<C-h>", ":TmuxNavigateLeft<CR>", M.opts.silent)
@@ -403,12 +401,12 @@ local lsp_servers = {
 		"tsserver",
 		"cssls",
 		"jsonls",
-		"zls",
 		"eslint",
 		"emmet_ls",
 		"sumneko_lua",
 		"crystalline",
 		"denols",
+    "zls",
 	},
 	overrides = {
 		["emmet_ls"] = {
@@ -432,6 +430,11 @@ local lsp_servers = {
 				},
 			},
 		},
+    ["eslint"] = {
+      settings = {
+        run = "onSave",
+      },
+    },
 		["denols"] = {
 			autostart = true,
 		},
@@ -577,3 +580,12 @@ session_manager.setup({
 	},
 	autosave_only_in_session = true,
 })
+
+null_ls.setup({
+  sources = {
+    null_ls.builtins.formatting.npm_groovy_lint,
+  },
+})
+
+-- TODO: need to disable lspconfig
+--navigator.setup()
