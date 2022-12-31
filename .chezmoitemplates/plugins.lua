@@ -36,6 +36,7 @@ packer.startup(function(use)
     "junegunn/fzf.vim",
     after = "fzf",
     config = function()
+      require("wagz.fzf")
     end,
   })
   use({
@@ -95,7 +96,9 @@ packer.startup(function(use)
   })
   use({
     "ahmedkhalf/project.nvim",
-    disable = true,
+    config = function()
+      require("wagz.project-nvim")
+    end,
   })
   use({
     "navarasu/onedark.nvim",
@@ -126,6 +129,7 @@ packer.startup(function(use)
     "Shatur/neovim-session-manager",
     requires = "nvim-lua/plenary.nvim",
     config = function()
+      require("wagz.session-manager")
     end,
   })
 end)
