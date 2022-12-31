@@ -1,4 +1,7 @@
+local set = vim.opt
 local onedark = require("onedark")
+
+set.termguicolors = true
 
 onedark.setup({
   style = "cool",

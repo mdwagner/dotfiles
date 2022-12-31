@@ -3,7 +3,69 @@ vim.cmd("packadd! packer.nvim")
 local packer = require("packer")
 
 packer.startup(function(use)
-  -- NVIM --
+  use({ "tpope/vim-surround" })
+  use({ "preservim/nerdcommenter" })
+  use({ "ntpeters/vim-better-whitespace" })
+  use({
+    "bling/vim-airline",
+    config = function()
+      require("wagz.airline")
+    end,
+  })
+  use({
+    "vim-airline/vim-airline-themes",
+    after = "vim-airline",
+  })
+  use({ "sickill/vim-pasta" })
+  use({
+    "tpope/vim-fugitive",
+    config = function()
+      require("wagz.git")
+    end,
+  })
+  use({
+    "sbdchd/neoformat",
+    config = function()
+    end,
+  })
+  use({
+    "junegunn/fzf",
+    run = "./install --bin",
+  })
+  use({
+    "junegunn/fzf.vim",
+    after = "fzf",
+    config = function()
+    end,
+  })
+  use({
+    "pbogut/fzf-mru.vim",
+    after = "fzf",
+  })
+  use({ "eslint/eslint" })
+  use({
+    "vim-test/vim-test",
+    config = function()
+    end,
+  })
+  use({
+    "ziglang/zig.vim",
+    ft = { "zig", "zir" },
+    config = function()
+    end,
+  })
+  use({
+    "vim-crystal/vim-crystal",
+    ft = { "crystal", "ecrystal" },
+    config = function()
+    end,
+  })
+  use({
+    "christoomey/vim-tmux-navigator",
+    config = function()
+    end,
+  })
+  use({ "jxnblk/vim-mdx-js" })
   use({ "neovim/nvim-lspconfig" })
   use({
     "hrsh7th/nvim-cmp",
@@ -15,61 +77,72 @@ packer.startup(function(use)
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
     },
+    after = "nvim-lspconfig",
+    config = function()
+    end,
   })
   use({
     "kyazdani42/nvim-tree.lua",
     requires = "kyazdani42/nvim-web-devicons",
+    config = function()
+    end,
   })
-  use({ "lukas-reineke/indent-blankline.nvim" })
-  use({ "ahmedkhalf/project.nvim" })
+  use({
+    "lukas-reineke/indent-blankline.nvim",
+    config = function()
+      require("wagz.indent-blankline")
+    end,
+  })
+  use({
+    "ahmedkhalf/project.nvim",
+    disable = true,
+  })
   use({
     "navarasu/onedark.nvim",
     config = function()
       require("wagz.onedark")
     end,
   })
-  use({ "mfussenegger/nvim-dap" })
   use({
     "rcarriga/nvim-dap-ui",
     requires = "mfussenegger/nvim-dap",
+    config = function()
+    end,
   })
   use({
     "nvim-treesitter/nvim-treesitter",
-    run = ":TSUpdate",
+    run = function()
+      local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
+      ts_update()
+    end,
+    config = function()
+    end,
   })
-  use({ "nvim-treesitter/playground" })
+  use({
+    "nvim-treesitter/playground",
+    after = "nvim-treesitter",
+  })
   use({
     "Shatur/neovim-session-manager",
     requires = "nvim-lua/plenary.nvim",
-    disable = true,
+    config = function()
+    end,
   })
-
-  -- VIM --
-  use({ "tpope/vim-surround" })
-  use({ "preservim/nerdcommenter" })
-  use({ "ntpeters/vim-better-whitespace" })
-  use({ "bling/vim-airline" })
-  use({ "vim-airline/vim-airline-themes" })
-  use({ "sickill/vim-pasta" })
-  use({ "tpope/vim-fugitive" })
-  use({ "sbdchd/neoformat" })
-  use({ "junegunn/fzf", run = "./install --bin" })
-  use({ "junegunn/fzf.vim" })
-  use({ "pbogut/fzf-mru.vim" })
-  use({ "eslint/eslint" })
-  use({ "vim-test/vim-test" })
-  use({ "ziglang/zig.vim" })
-  use({ "vim-crystal/vim-crystal" })
-  use({ "christoomey/vim-tmux-navigator" })
-  use({ "jxnblk/vim-mdx-js" })
 end)
 
 if vim.fn.filereadable(packer.config.compile_path) == 0 then
-  local choice = vim.fn.confirm([[Perform :PackerSync and Quit?]], [[&Yes\n&Cancel]], 1)
-  if choice == 1 then
-    packer.sync()
-    vim.cmd [[qall!]]
-  end
+  vim.ui.select(
+    { "Yes", "Cancel" },
+    { prompt = [[Perform :PackerSync and Quit?]] },
+    function(choice)
+      if choice == "Yes" or not choice then
+        vim.api.nvim_create_autocmd({ "User", "PackerComplete" }, {
+          command = "qall!"
+        })
+        packer.sync()
+      end
+    end
+  )
   return false
 end
 
