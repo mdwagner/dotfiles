@@ -6,7 +6,6 @@
 --    \ \____________\ \__\ \__\ \_______\\________\
 --     \|____________|\|__|\|__|\|_______|\|_______|
 
--- NOTE: Minimum config for NVIM
 vim.opt.number = true
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
@@ -60,10 +59,10 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 })
 
 if not pcall(require, "wagz.plugins") then
-	print("No plugins found! Minimum config loaded...")
+	print("Tiny config loaded!")
 	return
 else
-	print("Some plugins found! Minimum config loaded...")
+	print("Plugins loaded!")
   return
 end
 

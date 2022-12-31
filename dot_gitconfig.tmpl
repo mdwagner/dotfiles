@@ -1,6 +1,6 @@
 [user]
-	name = Michael Wagner
-	email = mdwranger@gmail.com
+  name = Michael Wagner
+  email = {{ .email }}
 ;[core]
   ;editor = nvim
 ;[difftool]
@@ -12,6 +12,6 @@
 [credential]
   helper = "cache --timeout=14400" ;4 hours
   ;helper = !git-credential-1password ;TODO: better alternative
-  ;helper = store ;TODO: could be used for work
+  ;helper = store ;TODO: could be used for $profile=client
 [alias]
   slog = log --graph --all --topo-order --pretty='format:%h %ai %s%d (%an)'
