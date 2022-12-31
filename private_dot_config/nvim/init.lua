@@ -83,4 +83,12 @@ autocmd("FileType", {
   end,
 })
 
-pcall(require, "wagz.plugins")
+local ok, result = pcall(require, "wagz.plugins")
+if not ok then
+  print("No plugins loaded...")
+  if result then
+    print(result)
+  end
+elseif result == false then
+  print("Plugins incorrectly loaded...")
+end
