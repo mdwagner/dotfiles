@@ -1,6 +1,8 @@
 vim.cmd("packadd! packer.nvim")
 
-require("packer").startup(function(use)
+local packer = require("packer")
+
+packer.startup(function(use)
   -- NVIM --
   use({ "neovim/nvim-lspconfig" })
   use({
@@ -20,7 +22,12 @@ require("packer").startup(function(use)
   })
   use({ "lukas-reineke/indent-blankline.nvim" })
   use({ "ahmedkhalf/project.nvim" })
-  use({ "navarasu/onedark.nvim" })
+  use({
+    "navarasu/onedark.nvim",
+    config = function()
+      require("wagz.onedark")
+    end,
+  })
   use({ "mfussenegger/nvim-dap" })
   use({
     "rcarriga/nvim-dap-ui",
@@ -34,6 +41,7 @@ require("packer").startup(function(use)
   use({
     "Shatur/neovim-session-manager",
     requires = "nvim-lua/plenary.nvim",
+    disable = true,
   })
 
   -- VIM --
@@ -55,5 +63,14 @@ require("packer").startup(function(use)
   use({ "christoomey/vim-tmux-navigator" })
   use({ "jxnblk/vim-mdx-js" })
 end)
+
+if vim.fn.filereadable(packer.config.compile_path) == 0 then
+  local choice = vim.fn.confirm([[Perform :PackerSync and Quit?]], [[&Yes\n&Cancel]], 1)
+  if choice == 1 then
+    packer.sync()
+    vim.cmd [[qall!]]
+  end
+  return false
+end
 
 return true
