@@ -98,7 +98,7 @@ local dapui = require("dapui")
 local nvim_treesitter_configs = require("nvim-treesitter.configs")
 local session_manager = require("session_manager")
 local session_manager_config = require("session_manager.config")
-local null_ls = require("null-ls")
+--local null_ls = require("null-ls")
 --local navigator = require("navigator")
 
 -- VIM -> NVIM shortcuts --
@@ -390,7 +390,7 @@ cmp.setup.cmdline(":", {
 })
 
 -- Setup lspconfig
-local capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = cmp_nvim_lsp.default_capabilities()
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
@@ -580,11 +580,11 @@ session_manager.setup({
 	autosave_only_in_session = true,
 })
 
-null_ls.setup({
-  sources = {
-    null_ls.builtins.formatting.npm_groovy_lint,
-  },
-})
+--null_ls.setup({
+--  sources = {
+--    null_ls.builtins.formatting.npm_groovy_lint,
+--  },
+--})
 
 -- TODO: need to disable lspconfig
 --navigator.setup()
