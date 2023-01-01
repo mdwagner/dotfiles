@@ -143,9 +143,9 @@ local capabilities = cmp_nvim_lsp.default_capabilities()
 local lsp_servers = {
 	servers = {
     "bashls",
-    "crystalline", -- TODO
+    "crystalline",
     "cssls",
-    "denols", -- TODO
+    "denols",
     "emmet_ls",
     "eslint",
     "jsonls",
@@ -155,12 +155,6 @@ local lsp_servers = {
     "zls",
 	},
 	overrides = {
-    ["crystalline"] = {
-      autostart = true,
-    },
-    ["denols"] = {
-      autostart = true,
-    },
 		["emmet_ls"] = {
 			filetypes = { "html", "css", "typescriptreact", "javascriptreact" },
 		},
@@ -187,9 +181,6 @@ local lsp_servers = {
 					},
 				},
 			},
-		},
-		["zls"] = {
-			autostart = true,
 		},
 	},
 }
