@@ -1,9 +1,8 @@
 {{- template "external-asdf.yaml" }}
 {{- template "external-fonts.yaml" }}
-{{- template "external-vim-builtins.yaml" }}
+{{- template "external-builtins.yaml" }}
 {{- if .use_vim_packages -}}
   {{- template "external-vim.yaml" }}
-  {{- template "external-nvim.yaml" }}
 {{- else -}}
   {{- template "external-packer.yaml" }}
 {{- end -}}

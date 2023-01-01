@@ -1,8 +1,6 @@
 vim.cmd("packadd! packer.nvim")
 
-local packer = require("packer")
-
-packer.startup(function(use)
+require("packer").startup(function(use)
   use({ "tpope/vim-surround" })
   use({ "preservim/nerdcommenter" })
   use({
@@ -144,22 +142,3 @@ packer.startup(function(use)
     end,
   })
 end)
-
-if vim.fn.filereadable(packer.config.compile_path) == 0 then
-  vim.ui.select(
-    { "Yes", "Cancel" },
-    { prompt = [[Perform :PackerSync and Quit?]] },
-    function(choice)
-      if choice == "Yes" or not choice then
-        vim.api.nvim_create_autocmd("User", {
-          pattern = "PackerComplete",
-          command = "qall!"
-        })
-        packer.sync()
-      end
-    end
-  )
-  return false
-end
-
-return true
