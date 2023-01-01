@@ -1,9 +1,11 @@
 # $SHELL
-set -gx SHELL (which fish)
+if type -sq fish
+  set -gx SHELL (type -p fish)
+end
 
 # $GIT_EDITOR
 if type -sq nvim
-  set -gx GIT_EDITOR (which nvim)
+  set -gx GIT_EDITOR (type -p nvim)
 end
 
 fish_add_path ~/.local/bin
