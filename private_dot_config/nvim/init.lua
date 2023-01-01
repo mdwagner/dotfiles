@@ -44,7 +44,7 @@ if vim.fn.executable("nvr") == 1 then
 end
 
 autocmd("TermOpen", {
-	group = augroup("NEW_TERMINAL", {}),
+	group = augroup("WAGZ_NEW_TERMINAL", {}),
 	pattern = "*",
 	callback = function()
 		set_local.number = false
@@ -53,7 +53,7 @@ autocmd("TermOpen", {
 	end,
 })
 autocmd("TextYankPost", {
-	group = augroup("HIGHLIGHT_YANK", {}),
+	group = augroup("WAGZ_HIGHLIGHT_YANK", {}),
 	pattern = "*",
 	callback = function()
 		vim.highlight.on_yank({
@@ -62,21 +62,21 @@ autocmd("TextYankPost", {
 	end,
 })
 autocmd("WinNew", {
-	group = augroup("DISABLE_FOLDING", {}),
+	group = augroup("WAGZ_DISABLE_FOLDING", {}),
 	pattern = "*",
   callback = function()
     set.foldenable = false
   end,
 })
 autocmd({ "BufNewFile", "BufRead" }, {
-  group = augroup("BATS_BASH_EXT", {}),
+  group = augroup("WAGZ_BATS_BASH_EXT", {}),
   pattern = "*.bats",
   callback = function()
     set.filetype = "bash"
   end,
 })
 autocmd("FileType", {
-  group = augroup("GIT_EDITING", {}),
+  group = augroup("WAGZ_GIT_EDITING", {}),
   pattern = { "gitcommit", "gitrebase", "gitconfig" },
   callback = function()
     set.bufhidden = "delete"

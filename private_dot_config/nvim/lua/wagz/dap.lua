@@ -33,12 +33,12 @@ dap.listeners.before.event_exited["dapui_config"] = function()
 end
 
 vim.api.nvim_create_autocmd("User", {
-  group = vim.api.nvim_create_augroup("CONFIGURE_DAP", {}),
-  pattern = "ConfigureDap",
+  group = vim.api.nvim_create_augroup("WAGZ_DAP", {}),
+  pattern = "WagzDap",
   callback = function()
     dapui.setup()
   end,
   once = true,
 })
 
-vim.cmd [[doautocmd User ConfigureDap]]
+vim.cmd [[doautocmd User WagzDap]]
