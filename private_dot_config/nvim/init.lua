@@ -25,6 +25,7 @@ set.splitbelow = true
 set.splitright = true
 set.hlsearch = false
 set.foldenable = false
+set.mouse = nil
 
 let_g.mapleader = ","
 let_g.do_filetype_lua = 1
