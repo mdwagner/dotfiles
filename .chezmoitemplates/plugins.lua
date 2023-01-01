@@ -5,7 +5,12 @@ local packer = require("packer")
 packer.startup(function(use)
   use({ "tpope/vim-surround" })
   use({ "preservim/nerdcommenter" })
-  use({ "ntpeters/vim-better-whitespace" })
+  use({
+    "ntpeters/vim-better-whitespace",
+    config = function()
+      require("wagz.better-whitespace")
+    end,
+  })
   use({
     "bling/vim-airline",
     config = function()

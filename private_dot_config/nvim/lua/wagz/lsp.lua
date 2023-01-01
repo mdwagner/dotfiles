@@ -4,6 +4,7 @@ local cmp_nvim_lsp = require("cmp_nvim_lsp")
 local nvim_lsp = require("lspconfig")
 
 local set = vim.opt
+local let_g = vim.g
 local buf_set_option = vim.api.nvim_buf_set_option
 local buf_get_lines = vim.api.nvim_buf_get_lines
 local win_get_cursor = vim.api.nvim_win_get_cursor
@@ -130,6 +131,10 @@ cmp.setup.cmdline(":", {
 	}),
 })
 
+let_g.markdown_fenced_languages = {
+  "ts=typescript"
+}
+
 -- Setup lspconfig
 local capabilities = cmp_nvim_lsp.default_capabilities()
 
@@ -137,21 +142,33 @@ local capabilities = cmp_nvim_lsp.default_capabilities()
 -- map buffer local keybindings when the language server attaches
 local lsp_servers = {
 	servers = {
+    "bashls",
+    "crystalline", -- TODO
+    "cssls",
+    "denols", -- TODO
+    "emmet_ls",
+    "eslint",
+    "jsonls",
+    "sumneko_lua",
+    "tsserver",
 		"vimls",
-		"tsserver",
-		"cssls",
-		"jsonls",
-		"eslint",
-		"emmet_ls",
-		"sumneko_lua",
-		"crystalline",
-		"denols",
     "zls",
 	},
 	overrides = {
+    ["crystalline"] = {
+      autostart = true,
+    },
+    ["denols"] = {
+      autostart = true,
+    },
 		["emmet_ls"] = {
 			filetypes = { "html", "css", "typescriptreact", "javascriptreact" },
 		},
+    ["eslint"] = {
+      settings = {
+        run = "onSave",
+      },
+    },
 		["sumneko_lua"] = {
 			settings = {
 				Lua = {
@@ -171,18 +188,7 @@ local lsp_servers = {
 				},
 			},
 		},
-    ["eslint"] = {
-      settings = {
-        run = "onSave",
-      },
-    },
-		["denols"] = {
-			autostart = true,
-		},
 		["zls"] = {
-			autostart = true,
-		},
-		["crystalline"] = {
 			autostart = true,
 		},
 	},
