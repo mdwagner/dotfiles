@@ -26,6 +26,7 @@ packer.startup(function(use)
   use({
     "sbdchd/neoformat",
     config = function()
+      require("wagz.neoformat")
     end,
   })
   use({
@@ -47,23 +48,24 @@ packer.startup(function(use)
   use({
     "vim-test/vim-test",
     config = function()
+      require("wagz.vim-test")
     end,
   })
   use({
     "ziglang/zig.vim",
     ft = { "zig", "zir" },
     config = function()
+      require("wagz.zig")
     end,
   })
   use({
     "vim-crystal/vim-crystal",
     ft = { "crystal", "ecrystal" },
-    config = function()
-    end,
   })
   use({
     "christoomey/vim-tmux-navigator",
     config = function()
+      require("wagz.tmux-navigator")
     end,
   })
   use({ "jxnblk/vim-mdx-js" })
@@ -80,12 +82,14 @@ packer.startup(function(use)
     },
     after = "nvim-lspconfig",
     config = function()
+      require("wagz.lsp")
     end,
   })
   use({
     "kyazdani42/nvim-tree.lua",
     requires = "kyazdani42/nvim-web-devicons",
     config = function()
+      require("wagz.nvim-tree")
     end,
   })
   use({
@@ -110,6 +114,7 @@ packer.startup(function(use)
     "rcarriga/nvim-dap-ui",
     requires = "mfussenegger/nvim-dap",
     config = function()
+      require("wagz.dap")
     end,
   })
   use({
@@ -119,6 +124,7 @@ packer.startup(function(use)
       ts_update()
     end,
     config = function()
+      require("wagz.treesitter")
     end,
   })
   use({
@@ -140,7 +146,8 @@ if vim.fn.filereadable(packer.config.compile_path) == 0 then
     { prompt = [[Perform :PackerSync and Quit?]] },
     function(choice)
       if choice == "Yes" or not choice then
-        vim.api.nvim_create_autocmd({ "User", "PackerComplete" }, {
+        vim.api.nvim_create_autocmd("User", {
+          pattern = "PackerComplete",
           command = "qall!"
         })
         packer.sync()

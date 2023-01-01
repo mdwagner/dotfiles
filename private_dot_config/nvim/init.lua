@@ -32,7 +32,6 @@ let_g.loaded_python_provider = 0
 let_g.loaded_python3_provider = 0
 let_g.loaded_ruby_provider = 0
 let_g.loaded_perl_provider = 0
-let_g.loaded_node_provider = 0
 
 if vim.fn.executable("rg") == 1 then
   set.grepprg = "rg --vimgrep"
