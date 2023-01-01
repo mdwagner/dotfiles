@@ -89,6 +89,4 @@ if not ok then
   if result then
     print(result)
   end
-elseif result == false then
-  print("Plugins incorrectly loaded...")
 end
