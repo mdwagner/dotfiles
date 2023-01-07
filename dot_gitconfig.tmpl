@@ -10,8 +10,11 @@
 ;[difftool "nvimdiff"]
   ;cmd = "nvim -d\"$LOCAL\" \"$REMOTE\""
 [credential]
+{{- if eq .profile "client" }}
+  helper = store
+{{- else }}
   helper = "cache --timeout=14400" ;4 hours
   ;helper = !git-credential-1password ;TODO: better alternative
-  ;helper = store ;TODO: could be used for $profile=client
+{{- end }}
 [alias]
   slog = log --graph --all --topo-order --pretty='format:%h %ai %s%d (%an)'

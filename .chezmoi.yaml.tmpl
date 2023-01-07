@@ -29,6 +29,15 @@ data:
   profile: {{ $profile | quote }}
   email: {{ $email | quote }}
   use_vim_packages: {{ $use_vim_packages }}
+edit:
+  command: nvim
 diff:
   exclude:
   - externals
+merge:
+  command: nvim
+  args:
+  - "-d"
+  - {{ `{{ .Destination }}` | quote }}
+  - {{ `{{ .Source }}` | quote }}
+  - {{ `{{ .Target }}` | quote }}

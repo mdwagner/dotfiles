@@ -35,6 +35,7 @@ vim.cmd([[
   packadd! playground
   packadd! plenary.nvim
   packadd! neovim-session-manager
+  packadd! scratch.vim
 ]])
 
 require("wagz.better-whitespace")

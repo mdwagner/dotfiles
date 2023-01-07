@@ -141,4 +141,5 @@ require("packer").startup(function(use)
       require("wagz.session-manager")
     end,
   })
+  use({ "mtth/scratch.vim" })
 end)
