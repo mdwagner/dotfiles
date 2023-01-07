@@ -181,6 +181,13 @@ local lsp_servers = {
           telemetry = {
             enable = false,
           },
+          format = {
+            enable = true,
+            defaultConfig = {
+              indent_style = "tab",
+              tab_size = "2",
+            },
+          },
         },
       },
     },
