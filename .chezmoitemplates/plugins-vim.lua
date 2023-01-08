@@ -7,9 +7,6 @@ vim.cmd([[
   packadd! vim-pasta
   packadd! vim-fugitive
   packadd! neoformat
-  packadd! fzf
-  packadd! fzf.vim
-  packadd! fzf-mru.vim
   packadd! eslint
   packadd! vim-test
   packadd! zig.vim
@@ -36,13 +33,14 @@ vim.cmd([[
   packadd! plenary.nvim
   packadd! neovim-session-manager
   packadd! scratch.vim
+  packadd! telescope-fzf-native.nvim
+  packadd! telescope.nvim
 ]])
 
 require("wagz.better-whitespace")
 require("wagz.airline")
 require("wagz.git")
 require("wagz.neoformat")
-require("wagz.fzf")
 require("wagz.vim-test")
 require("wagz.zig")
 require("wagz.tmux-navigator")
@@ -54,3 +52,4 @@ require("wagz.onedark")
 require("wagz.dap")
 require("wagz.treesitter")
 require("wagz.session-manager")
+require("wagz.telescope")

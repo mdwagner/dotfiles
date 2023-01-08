@@ -30,18 +30,6 @@
   type: archive
   url: https://github.com/sbdchd/neoformat/archive/refs/heads/master.tar.gz
   stripComponents: 1
-".local/share/nvim/site/pack/junegunn/opt/fzf":
-  type: archive
-  url: https://github.com/junegunn/fzf/archive/refs/heads/master.tar.gz
-  stripComponents: 1
-".local/share/nvim/site/pack/junegunn/opt/fzf.vim":
-  type: archive
-  url: https://github.com/junegunn/fzf.vim/archive/refs/heads/master.tar.gz
-  stripComponents: 1
-".local/share/nvim/site/pack/pbogut/opt/fzf-mru.vim":
-  type: archive
-  url: https://github.com/pbogut/fzf-mru.vim/archive/refs/heads/master.tar.gz
-  stripComponents: 1
 ".local/share/nvim/site/pack/eslint/opt/eslint":
   type: archive
   url: https://github.com/eslint/eslint/archive/refs/heads/master.tar.gz
@@ -145,4 +133,12 @@
 ".local/share/nvim/site/pack/mtth/opt/scratch.vim":
   type: archive
   url: https://github.com/mtth/scratch.vim/archive/refs/heads/master.tar.gz
+  stripComponents: 1
+".local/share/nvim/site/pack/nvim-telescope/opt/telescope.nvim":
+  type: archive
+  url: https://github.com/nvim-telescope/telescope.nvim/archive/refs/tags/0.1.0.tar.gz
+  stripComponents: 1
+".local/share/nvim/site/pack/nvim-telescope/opt/telescope-fzf-native.nvim":
+  type: archive
+  url: https://github.com/nvim-telescope/telescope-fzf-native.nvim/archive/refs/heads/master.tar.gz
   stripComponents: 1

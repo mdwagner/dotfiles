@@ -32,21 +32,6 @@ require("packer").startup(function(use)
       require("wagz.neoformat")
     end,
   })
-  use({
-    "junegunn/fzf",
-    run = "./install --bin",
-  })
-  use({
-    "junegunn/fzf.vim",
-    after = "fzf",
-    config = function()
-      require("wagz.fzf")
-    end,
-  })
-  use({
-    "pbogut/fzf-mru.vim",
-    after = "fzf",
-  })
   use({ "eslint/eslint" })
   use({
     "vim-test/vim-test",
@@ -142,4 +127,19 @@ require("packer").startup(function(use)
     end,
   })
   use({ "mtth/scratch.vim" })
+  use({
+    "nvim-telescope/telescope-fzf-native.nvim",
+    run = "make",
+  })
+  use({
+    "nvim-telescope/telescope.nvim",
+    tag = "0.1.0",
+    requires = {
+      "nvim-telescope/telescope-fzf-native.nvim",
+      "nvim-lua/plenary.nvim",
+    },
+    config = function()
+      require("wagz.telescope")
+    end,
+  })
 end)
