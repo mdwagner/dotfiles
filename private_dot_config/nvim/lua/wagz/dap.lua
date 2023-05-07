@@ -22,23 +22,33 @@ vim.keymap.set("n", "<F4>", ":lua require('dap').run_last()<CR>", { silent = tru
 vim.keymap.set("n", "<F10>", ":lua require('dap').terminate()<CR>", { silent = true })
 
 dap.listeners.after.event_initialized["dapui_config"] = function()
-  dapui.open({})
-  dap.repl.close()
+  dapui.open()
 end
 dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close({})
+  dapui.close()
 end
 dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close({})
+  dapui.close()
 end
 
+local group = vim.api.nvim_create_augroup("WAGZ_DAP", {})
+
 vim.api.nvim_create_autocmd("User", {
-  group = vim.api.nvim_create_augroup("WAGZ_DAP", {}),
+  group = group,
   pattern = "WagzDap",
   callback = function()
     dapui.setup()
   end,
   once = true,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = group,
+  pattern = "dap-repl",
+  callback = function(args)
+    -- Hides dap-repl from appearing in buffers
+    vim.api.nvim_buf_set_option(args.buf, "buflisted", false)
+  end,
 })
 
 vim.cmd [[doautocmd User WagzDap]]
