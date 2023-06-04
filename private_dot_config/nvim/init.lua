@@ -39,9 +39,9 @@ if vim.fn.executable("rg") == 1 then
   set.grepformat:prepend("%f:%l:%c:%m")
 end
 
---if vim.fn.executable("nvr") == 1 then
---  vim.env.GIT_EDITOR = [[nvr -cc split --remote-wait]]
---end
+if vim.fn.executable("nvr") == 1 then
+  vim.env.GIT_EDITOR = [[nvr -cc split --remote-wait]]
+end
 
 autocmd("TermOpen", {
 	group = augroup("WAGZ_NEW_TERMINAL", {}),
