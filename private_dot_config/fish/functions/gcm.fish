@@ -1,3 +1,3 @@
 function gcm
-  gcom -m $argv
+  git commit -m $argv
 end

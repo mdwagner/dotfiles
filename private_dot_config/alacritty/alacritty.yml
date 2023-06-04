@@ -100,6 +100,7 @@ window:
   # Commonly supported values are `dark` and `light`. Set this to `None` to use
   # the default theme variant.
   #decorations_theme_variant: None
+  decorations_theme_variant: Dark
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.
@@ -119,9 +120,9 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    #family: monospace
+    family: monospace
     #family: Cascadia Code PL
-    family: CaskaydiaCove Nerd Font
+    #family: CaskaydiaCove Nerd Font
 
     # The `style` can be specified to pick a specific face.
     #style: Regular
@@ -440,8 +441,8 @@ live_config_reload: true
 # Default:
 #   - (Linux/BSD/macOS) `$SHELL` or the user's login shell, if `$SHELL` is unset
 #   - (Windows) powershell
-#shell:
-#  program: /bin/bash
+shell:
+  program: /usr/bin/fish
 #  args:
 #    - --login
 

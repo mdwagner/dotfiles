@@ -7,12 +7,7 @@
 | server   | remote-servers, codespaces |
 */ -}}
 {{- $profile := "" -}}
-
 {{- $email := "" -}}
-
-{{- /*
-Use VIM packages, instead of packer.nvim. Default: false
-*/ -}}
 {{- $use_vim_packages := false -}}
 
 {{- if stdinIsATTY -}}
