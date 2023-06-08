@@ -1,0 +1,15 @@
+[user]
+  name = Michael Wagner
+  email = {{ .email }}
+  helper = "cache --timeout=14400" ;4 hours
+  signingkey = {{ (index (gitHubKeys "mdwagner") 0).Key }}
+[gpg]
+  format = ssh
+;Set commit.gpgsign to true so you don't need to include the -S flag with each commit. (optional)
+[commit]
+  gpgsign = true
+;Set gpg.ssh.program to the SSH signer binary provided by 1Password, so you don't have to set SSH_AUTH_SOCK yourself. (optional)
+;[gpg "ssh"]
+  ;program = /opt/1Password/op-ssh-sign
+[alias]
+  slog = log --graph --all --topo-order --pretty='format:%h %ai %s%d (%an)'
