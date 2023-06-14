@@ -4,5 +4,5 @@ neovim stable
 deno 1.34.1
 ruby 3.2.2
 zig 0.10.1
-chezmoi 2.33.6
+chezmoi 2.34.1
 lua-language-server 3.6.21
