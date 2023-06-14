@@ -3,6 +3,9 @@ if type -sq fish
   set -gx SHELL (type -P fish)
 end
 
+# $EDITOR
+set -gx EDITOR (type -P vi)
+
 # $GIT_EDITOR
 if type -sq nvim
   set -gx GIT_EDITOR (type -P nvim)
