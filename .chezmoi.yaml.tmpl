@@ -1,43 +1,6 @@
-{{- /*
-| $profile | usage                      |
-| -------- | -------------------------- |
-| home*    | personal                   |
-| work     | professional               |
-| client   | client-related work        |
-| server   | remote-servers, codespaces |
-*/ -}}
-{{- $profile := "" -}}
-
-{{- $email := "" -}}
-
-{{- /*
-Use VIM packages, instead of packer.nvim. Default: false
-*/ -}}
-{{- $use_vim_packages := false -}}
-
-{{- if stdinIsATTY -}}
-  {{- $profile = promptStringOnce . "profile" "[home|work|client|server] Which profile" "home" -}}
-  {{- $email = promptStringOnce . "email" "Email address" "mdwranger@gmail.com" -}}
-  {{- $use_vim_packages = promptBoolOnce . "use_vim_packages" "Use VIM packages" false -}}
-{{- else -}}
-  {{- $profile = "server" -}}
-  {{- $email = "mdwagner@users.noreply.github.com" -}}
-  {{- $use_vim_packages = true -}}
-{{- end -}}
-
+{{- $email = promptString "email" -}}
 data:
-  profile: {{ $profile | quote }}
   email: {{ $email | quote }}
-  use_vim_packages: {{ $use_vim_packages }}
-edit:
-  command: nvim
 diff:
   exclude:
   - externals
-merge:
-  command: nvim
-  args:
-  - "-d"
-  - {{ `{{ .Destination }}` | quote }}
-  - {{ `{{ .Source }}` | quote }}
-  - {{ `{{ .Target }}` | quote }}

@@ -1,8 +1,4 @@
 local nvim_treesitter_configs = require("nvim-treesitter.configs")
-{{ if ne .chezmoi.os "darwin" }}
-local nvim_treesitter_install = require("nvim-treesitter.install")
-nvim_treesitter_install.compilers = { "zig" }
-{{- end }}
 
 nvim_treesitter_configs.setup({
 	ensure_installed = {

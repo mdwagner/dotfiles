@@ -1,6 +1,0 @@
-".local/share/fonts/cascadia-code-nf":
-  type: archive
-  url: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/CascadiaCode.zip
-".local/share/fonts/cascadia-code-ms":
-  type: archive
-  url: https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip

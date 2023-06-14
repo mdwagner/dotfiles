@@ -8,40 +8,10 @@ if type -sq nvim
   set -gx GIT_EDITOR (type -P nvim)
 end
 
-fish_add_path ~/.local/bin
-
 {{- if eq .chezmoi.os "darwin" }}
 if test -f ~/.iterm2_shell_integration.fish
   source ~/.iterm2_shell_integration.fish
 end
 {{- end }}
 
-# ASDF
-{{- if eq .chezmoi.os "darwin" }}
-if type -sq brew
-  source (brew --prefix asdf)"/libexec/asdf.fish"
-end
-{{- else }}
-source ~/.asdf/asdf.fish
-{{- end }}
-
-# 1Password completion
-if type -sq op
-  op completion fish | source
-end
-
-# Deno
-set -gx DENO_NO_UPDATE_CHECK 1
-
-# Wasmer
-set -gx WASMER_DIR "$HOME/.wasmer"
-set -gx WASMER_CACHE_DIR "$WASMER_DIR/cache"
-fish_add_path "$WASMER_DIR/bin"
-fish_add_path "$WASMER_DIR/globals/wapm_packages/.bin"
-
-# Wasienv
-set -gx WASIENV_DIR "$HOME/.wasienv"
-fish_add_path "$WASIENV_DIR/bin"
-
-# bit
-fish_add_path ~/bin
+fish_add_path ~/.local/bin
