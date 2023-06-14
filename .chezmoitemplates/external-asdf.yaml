@@ -2,27 +2,3 @@
   type: archive
   url: https://github.com/asdf-vm/asdf/archive/refs/tags/v0.10.2.tar.gz
   stripComponents: 1
-".asdf/plugins/crystal":
-  type: archive
-  url: https://github.com/asdf-community/asdf-crystal/archive/refs/heads/master.tar.gz
-  stripComponents: 1
-".asdf/plugins/deno":
-  type: archive
-  url: https://github.com/asdf-community/asdf-deno/archive/refs/heads/master.tar.gz
-  stripComponents: 1
-".asdf/plugins/neovim":
-  type: archive
-  url: https://github.com/richin13/asdf-neovim/archive/refs/heads/master.tar.gz
-  stripComponents: 1
-".asdf/plugins/nodejs":
-  type: archive
-  url: https://github.com/asdf-vm/asdf-nodejs/archive/refs/heads/master.tar.gz
-  stripComponents: 1
-".asdf/plugins/rust":
-  type: archive
-  url: https://github.com/asdf-community/asdf-rust/archive/refs/heads/master.tar.gz
-  stripComponents: 1
-".asdf/plugins/zig":
-  type: archive
-  url: https://github.com/asdf-community/asdf-zig/archive/refs/heads/master.tar.gz
-  stripComponents: 1
