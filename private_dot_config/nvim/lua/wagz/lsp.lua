@@ -151,7 +151,7 @@ local lsp_servers = {
     "emmet_ls",
     "eslint",
     "jsonls",
-    "sumneko_lua",
+    "lua_ls",
     "tsserver",
     "vimls",
     "zls",
@@ -165,7 +165,7 @@ local lsp_servers = {
         run = "onSave",
       },
     },
-    ["sumneko_lua"] = {
+    ["lua_ls"] = {
       settings = {
         Lua = {
           runtime = {
