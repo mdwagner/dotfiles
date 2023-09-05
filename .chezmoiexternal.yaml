@@ -9,7 +9,7 @@
 ".local/share/fonts/cascadia-code-ms":
   type: archive
   url: https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip
-{{- end -}}
+{{ end -}}
 ".local/share/nvim/site/pack/alker0/start/chezmoi.vim":
   type: archive
   url: https://github.com/alker0/chezmoi.vim/archive/refs/heads/main.tar.gz
