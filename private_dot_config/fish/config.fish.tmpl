@@ -1,40 +1,47 @@
-# $SHELL
 if type -sq fish
   set -gx SHELL (type -P fish)
+else if test -x /opt/homebrew/bin/fish
+  set -gx SHELL /opt/homebrew/bin/fish
 end
 
-# $EDITOR
-set -gx EDITOR (type -P vi)
+if type -sq vi
+  set -gx EDITOR (type -P vi)
+else if type -sq vim
+  set -gx EDITOR (type -P vim)
+end
 
-# $GIT_EDITOR
 if type -sq nvim
   set -gx GIT_EDITOR (type -P nvim)
 end
-
-fish_add_path ~/.local/bin
-{{- if eq .chezmoi.os "darwin" }}
-
-# $SSH_AUTH_SOCK
-set -gx SSH_AUTH_SOCK ~/.1password/agent.sock
-
-if test -f ~/.iterm2_shell_integration.fish
-  source ~/.iterm2_shell_integration.fish
+{{ if eq .chezmoi.os "darwin" }}
+fish_add_path /opt/homebrew/bin
+fish_add_path /opt/homebrew/sbin
+set -gx HOMEBREW_BUNDLE_FILE ~/.config/brewfile/Brewfile
+{{ end }}
+if test -S ~/.1password/agent.sock
+  set -gx SSH_AUTH_SOCK ~/.1password/agent.sock
 end
-{{- end }}
 
-# ASDF
-{{- if eq .chezmoi.os "darwin" }}
-if type -sq brew
+if test -f ~/.asdf/asdf.fish
+  source ~/.asdf/asdf.fish
+else if type -sq brew && test -d (brew --prefix asdf)
   source (brew --prefix asdf)"/libexec/asdf.fish"
 end
-{{- else }}
-source ~/.asdf/asdf.fish
-{{- end }}
 
-# 1Password completion
 if type -sq op
   op completion fish | source
 end
 
-# Deno
+if test -f ~/.iterm2_shell_integration.fish
+  source ~/.iterm2_shell_integration.fish
+end
+
 set -gx DENO_NO_UPDATE_CHECK 1
+
+mkdir -p ~/.local/bin
+fish_add_path ~/.local/bin
+
+if type -sq brew
+  fish_add_path (brew --prefix llvm@15)"/bin"
+  fish_add_path (brew --prefix node@16)"/bin"
+end

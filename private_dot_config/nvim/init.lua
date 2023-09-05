@@ -43,6 +43,9 @@ if vim.fn.executable("nvr") == 1 then
   vim.env.GIT_EDITOR = [[nvr -cc split --remote-wait]]
 end
 
+-- https://neovim.io/doc/user/lua.html#vim.loader
+vim.loader.enable()
+
 autocmd("TermOpen", {
 	group = augroup("WAGZ_NEW_TERMINAL", {}),
 	pattern = "*",
