@@ -1,3 +1,20 @@
-{{- template "external-asdf.yaml" }}
-{{- template "external-builtins.yaml" }}
-{{- template "external-packer.yaml" }}
+{{- if ne .chezmoi.os "darwin" -}}
+".asdf":
+  type: archive
+  url: https://github.com/asdf-vm/asdf/archive/refs/tags/v0.10.2.tar.gz
+  stripComponents: 1
+".local/share/fonts/cascadia-code-nf":
+  type: archive
+  url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.1/CascadiaCode.zip
+".local/share/fonts/cascadia-code-ms":
+  type: archive
+  url: https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip
+{{- end -}}
+".local/share/nvim/site/pack/alker0/start/chezmoi.vim":
+  type: archive
+  url: https://github.com/alker0/chezmoi.vim/archive/refs/heads/main.tar.gz
+  stripComponents: 1
+".local/share/nvim/site/pack/wbthomason/opt/packer.nvim":
+  type: archive
+  url: https://github.com/wbthomason/packer.nvim/archive/refs/heads/master.tar.gz
+  stripComponents: 1

@@ -12,8 +12,10 @@ if type -sq nvim
 end
 
 fish_add_path ~/.local/bin
+{{ if eq .chezmoi.os "darwin" }}
+# $SSH_AUTH_SOCK
+set -gx SSH_AUTH_SOCK ~/.1password/agent.sock
 
-{{- if eq .chezmoi.os "darwin" }}
 if test -f ~/.iterm2_shell_integration.fish
   source ~/.iterm2_shell_integration.fish
 end

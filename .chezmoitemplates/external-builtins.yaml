@@ -1,4 +1,0 @@
-".local/share/nvim/site/pack/alker0/start/chezmoi.vim":
-  type: archive
-  url: https://github.com/alker0/chezmoi.vim/archive/refs/heads/main.tar.gz
-  stripComponents: 1

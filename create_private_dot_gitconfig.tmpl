@@ -1,15 +1,18 @@
 [user]
-  name = Michael Wagner
+  name = {{ .full_name }}
   email = {{ .email }}
-  helper = "cache --timeout=14400" ;4 hours
-  signingkey = {{ (index (gitHubKeys "mdwagner") 0).Key }}
+  signingkey = {{ (index (gitHubKeys .github_user) 0).Key }}
 [gpg]
   format = ssh
-;Set commit.gpgsign to true so you don't need to include the -S flag with each commit. (optional)
+[gpg "ssh"]
+{{- if eq .chezmoi.os "darwin" }}
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+{{- else }}
+  program = "/opt/1Password/op-ssh-sign"
+{{- end }}
 [commit]
   gpgsign = true
-;Set gpg.ssh.program to the SSH signer binary provided by 1Password, so you don't have to set SSH_AUTH_SOCK yourself. (optional)
-;[gpg "ssh"]
-  ;program = /opt/1Password/op-ssh-sign
+[credential]
+  helper = "cache --timeout=14400" ; 4 hours
 [alias]
   slog = log --graph --all --topo-order --pretty='format:%h %ai %s%d (%an)'
