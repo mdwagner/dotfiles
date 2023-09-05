@@ -1,4 +1,0 @@
-".asdf":
-  type: archive
-  url: https://github.com/asdf-vm/asdf/archive/refs/tags/v0.10.2.tar.gz
-  stripComponents: 1

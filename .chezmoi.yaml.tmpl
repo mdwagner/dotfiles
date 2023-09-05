@@ -1,24 +1,15 @@
-{{- /*
-| $profile | usage                      |
-| -------- | -------------------------- |
-| home*    | personal                   |
-| work     | professional               |
-| server   | remote-servers, codespaces |
-*/ -}}
-{{- $profile := "" -}}
-{{- $email := "" -}}
-
-{{- if stdinIsATTY -}}
-  {{- $profile = promptStringOnce . "profile" "home|work|server" "home" -}}
-  {{- $email = promptStringOnce . "email" "email address" "mdwranger@gmail.com" -}}
-{{- else -}}
-  {{- $profile = "server" -}}
-  {{- $email = "mdwagner@users.noreply.github.com" -}}
-{{- end -}}
-
+{{- $first_name := promptStringOnce . "first_name" "First Name" "Michael" -}}
+{{- $last_name := promptStringOnce . "last_name" "Last Name" "Wagner" -}}
+{{- $email := promptStringOnce . "email" "Email" "mdwranger@gmail.com" -}}
+{{- $github_user := promptStringOnce . "github_user" "GitHub User Name" "mdwagner" -}}
+{{- $strict := promptBoolOnce . "strict" "Restricted" false -}}
 data:
-  profile: {{ $profile | quote }}
+  first_name: {{ $first_name | quote }}
+  last_name: {{ $last_name | quote }}
+  full_name: {{ printf "%s %s" $first_name $last_name | quote }}
   email: {{ $email | quote }}
+  github_user: {{ $github_user | quote }}
+  strict: {{ $strict }}
 edit:
   command: nvim
 diff:
