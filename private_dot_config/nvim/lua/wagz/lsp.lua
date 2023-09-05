@@ -191,6 +191,12 @@ local lsp_servers = {
         },
       },
     },
+    ["denols"] = {
+      autostart = false,
+    },
+    ["tsserver"] = {
+      filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+    },
   },
 }
 
