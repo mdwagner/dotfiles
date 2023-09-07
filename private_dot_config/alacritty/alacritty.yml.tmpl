@@ -478,7 +478,11 @@ mouse:
   #triple_click: { threshold: 300 }
 
   # If this is `true`, the cursor is temporarily hidden when typing.
+  {{- if eq .chezmoi.os "darwin" }}
+  hide_when_typing: false
+  {{- else }}
   hide_when_typing: true
+  {{- end }}
 
 # Hints
 #
