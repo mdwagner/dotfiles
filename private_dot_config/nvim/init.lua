@@ -52,7 +52,7 @@ autocmd("TermOpen", {
 	callback = function()
 		set_local.number = false
 		set_local.relativenumber = false
-		set_local.scrollback = 10000
+		set_local.scrollback = 100000
 	end,
 })
 autocmd("TextYankPost", {

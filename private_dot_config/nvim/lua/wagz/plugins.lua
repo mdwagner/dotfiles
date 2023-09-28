@@ -142,4 +142,8 @@ require("packer").startup(function(use)
       require("wagz.telescope")
     end,
   })
+  use({
+    "earthly/earthly.vim",
+    branch = "main",
+  })
 end)
