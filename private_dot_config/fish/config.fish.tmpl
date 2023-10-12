@@ -45,3 +45,8 @@ if type -sq brew
   fish_add_path (brew --prefix llvm@15)"/bin"
   fish_add_path (brew --prefix node@16)"/bin"
 end
+
+if test -f ~/.asdf/plugins/golang/set-env.fish
+  set -gx ASDF_GOLANG_MOD_VERSION_ENABLED true
+  source ~/.asdf/plugins/golang/set-env.fish
+end
