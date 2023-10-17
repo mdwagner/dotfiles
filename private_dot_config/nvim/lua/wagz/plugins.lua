@@ -152,8 +152,4 @@ require("packer").startup(function(use)
 			require("wagz.debugprint")
 		end,
 	})
-	use({
-		"earthly/earthly.vim",
-		branch = "main",
-	})
 end)
