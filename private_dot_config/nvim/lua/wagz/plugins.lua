@@ -149,7 +149,11 @@ require("packer").startup(function(use)
 	use({
 		"andrewferrier/debugprint.nvim",
 		config = function()
-      require("wagz.debugprint")
+			require("wagz.debugprint")
 		end,
+	})
+	use({
+		"earthly/earthly.vim",
+		branch = "main",
 	})
 end)
