@@ -1,8 +1,16 @@
-local indent_blankline = require("indent_blankline")
+local indent_blankline = require("ibl")
 
 indent_blankline.setup({
-	char = "¦",
-	buftype_exclude = { "terminal" },
-	show_first_indent_level = false,
-	show_trailing_blankline_indent = false,
+  indent = {
+    char = "¦",
+  },
+  exclude = {
+    buftypes = { "terminal" },
+  },
+  scope = {
+    show_start = false,
+  },
+  whitespace = {
+    remove_blankline_trail = false
+  },
 })

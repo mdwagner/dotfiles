@@ -93,9 +93,9 @@ require("packer").startup(function(use)
 		end,
 	})
 	use({
-		"navarasu/onedark.nvim",
+		"folke/tokyonight.nvim",
 		config = function()
-			require("wagz.onedark")
+			require("wagz.tokyonight")
 		end,
 	})
 	use({
@@ -126,14 +126,19 @@ require("packer").startup(function(use)
 			require("wagz.session-manager")
 		end,
 	})
-	use({ "mtth/scratch.vim" })
+	use({
+		"mtth/scratch.vim",
+		config = function()
+			require("wagz.scratch")
+		end,
+	})
 	use({
 		"nvim-telescope/telescope-fzf-native.nvim",
 		run = "make",
 	})
 	use({
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.0",
+		tag = "0.1.4",
 		requires = {
 			"nvim-telescope/telescope-fzf-native.nvim",
 			"nvim-lua/plenary.nvim",
