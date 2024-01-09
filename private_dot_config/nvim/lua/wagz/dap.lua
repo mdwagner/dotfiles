@@ -1,25 +1,36 @@
 local dap = require("dap")
 local dapui = require("dapui")
 
-vim.keymap.set("n", "<F5>", ":lua require('dap').continue()<CR>", { silent = true })
-vim.keymap.set("n", "<F6>", ":lua require('dap').step_over()<CR>", { silent = true })
-vim.keymap.set("n", "<F7>", ":lua require('dap').step_into()<CR>", { silent = true })
-vim.keymap.set("n", "<F8>", ":lua require('dap').step_out()<CR>", { silent = true })
-vim.keymap.set("n", "<F1>", ":lua require('dap').toggle_breakpoint()<CR>", { silent = true })
-vim.keymap.set(
-  "n",
-  "<F2>",
-  ":lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>",
-  { silent = true }
-)
-vim.keymap.set(
-  "n",
-  "<F3>",
-  ":lua require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))",
-  { silent = true }
-)
-vim.keymap.set("n", "<F4>", ":lua require('dap').run_last()<CR>", { silent = true })
-vim.keymap.set("n", "<F10>", ":lua require('dap').terminate()<CR>", { silent = true })
+vim.keymap.set("n", "<F5>", function() dap.continue() end)
+vim.keymap.set("n", "<F10>", function() dap.step_over() end)
+vim.keymap.set("n", "<F11>", function() dap.step_into() end)
+vim.keymap.set("n", "<F12>", function() dap.step_out() end)
+vim.keymap.set("n", "<Leader>lb", function() dap.toggle_breakpoint() end)
+vim.keymap.set("n", "<Leader>lB", function() dap.set_breakpoint() end)
+vim.keymap.set("n", "<Leader>lp", function() dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: ")) end)
+vim.keymap.set("n", "<Leader>ll", function() dap.run_last() end)
+
+dap.adapters.gdb = {
+  type = "executable",
+  command = "gdb",
+  args = { "-q", "-i", "dap" }
+}
+
+dap.configurations.crystal = {
+  {
+    name = "Launch",
+    type = "gdb",
+    request = "launch",
+    program = function()
+      local path = vim.fn.input({
+        prompt = "Path to executable: ",
+        default = vim.fn.getcwd() .. "/",
+        completion = "file"
+      })
+      return (path and path ~= "") and path or dap.ABORT
+    end,
+  }
+}
 
 dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()
@@ -31,24 +42,35 @@ dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close()
 end
 
-local group = vim.api.nvim_create_augroup("WAGZ_DAP", {})
-
-vim.api.nvim_create_autocmd("User", {
-  group = group,
-  pattern = "WagzDap",
-  callback = function()
-    dapui.setup()
-  end,
-  once = true,
+dapui.setup({
+  layouts = {
+    {
+      position = "left",
+      size = 40,
+      elements = {
+        {
+          id = "scopes",
+          size = 0.5
+        },
+        {
+          id = "watches",
+          size = 0.25
+        },
+        {
+          id = "breakpoints",
+          size = 0.25
+        },
+      },
+    },
+    {
+      position = "bottom",
+      size = 10,
+      elements = {
+        {
+          id = "repl",
+          size = 1
+        },
+      },
+    }
+  },
 })
-
-vim.api.nvim_create_autocmd("FileType", {
-  group = group,
-  pattern = "dap-repl",
-  callback = function(args)
-    -- Hides dap-repl from appearing in buffers
-    vim.api.nvim_buf_set_option(args.buf, "buflisted", false)
-  end,
-})
-
-vim.cmd [[doautocmd User WagzDap]]
