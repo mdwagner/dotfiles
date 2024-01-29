@@ -28,7 +28,6 @@ set.foldenable = false
 set.mouse = nil
 
 let_g.mapleader = ","
-let_g.do_filetype_lua = 1
 let_g.loaded_python_provider = 0
 let_g.loaded_python3_provider = 0
 let_g.loaded_ruby_provider = 0
@@ -41,6 +40,19 @@ end
 
 if vim.fn.executable("nvr") == 1 then
   vim.env.GIT_EDITOR = [[nvr -cc split --remote-wait]]
+end
+
+if vim.fn.hash("win32") == 1 then
+	if vim.fn.executable("pwsh") == 1 then
+		set.shell = "pwsh"
+	else
+		set.shell = "powershell"
+	end
+	set.shellcmdflag = "-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues['Out-File:Encoding']='utf8';"
+	set.shellredir = [[2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode]]
+	set.shellpipe = [[2>&1 | %%{ "$_" } | Tee-Object %s; exit $LastExitCode]]
+	set.shellquote = ""
+	set.shellxquote = ""
 end
 
 -- https://neovim.io/doc/user/lua.html#vim.loader

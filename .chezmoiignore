@@ -1,0 +1,9 @@
+{{- if eq .chezmoi.os "windows" }}
+.tool-versions
+.default-npm-packages
+.asdfrc
+.gitconfig
+.config
+.local\share
+.asdf
+{{- end }}
