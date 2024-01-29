@@ -1,0 +1,10 @@
+{{ if ne .chezmoi.os "windows" }}
+[".local/share/nvim/site/pack/alker0/start/chezmoi.vim"]
+  type = "archive"
+  url = "https://github.com/alker0/chezmoi.vim/archive/refs/heads/main.tar.gz"
+  stripComponents = 1
+[".local/share/nvim/site/pack/wbthomason/opt/packer.nvim"]
+  type = "archive"
+  url = "https://github.com/wbthomason/packer.nvim/archive/refs/heads/master.tar.gz"
+  stripComponents = 1
+{{ end }}
