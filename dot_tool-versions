@@ -4,7 +4,7 @@ neovim 0.9.4
 deno 1.34.1
 ruby 3.2.2
 zig 0.10.1
-chezmoi 2.34.1
+chezmoi 2.46.0
 lua-language-server 3.6.21
 golang 1.21.2
 bun 1.0.25
