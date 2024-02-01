@@ -220,4 +220,11 @@ return {
     "lewis6991/gitsigns.nvim",
     config = true,
   },
+  {
+    "alker0/chezmoi.vim",
+    lazy = false,
+    init = function()
+      vim.g["chezmoi#use_tmp_buffer"] = true -- required
+    end,
+  },
 }
