@@ -11,7 +11,7 @@
   "eslint": { "branch": "main", "commit": "857e242584227181ecb8af79fc6bc236b9975228" },
   "gitsigns.nvim": { "branch": "main", "commit": "2c2463dbd82eddd7dbab881c3a62cfbfbe3c67ae" },
   "indent-blankline.nvim": { "branch": "master", "commit": "12e92044d313c54c438bd786d11684c88f6f78cd" },
-  "lazy.nvim": { "branch": "main", "commit": "aedcd79811d491b60d0a6577a9c1701063c2a609" },
+  "lazy.nvim": { "branch": "main", "commit": "28126922c9b54e35a192ac415788f202c3944c9f" },
   "lualine.nvim": { "branch": "master", "commit": "7d131a8d3ba5016229e8a1d08bf8782acea98852" },
   "mini.starter": { "branch": "main", "commit": "0ee58ac8975a929e90c8b104987fabfd13015e25" },
   "neoformat": { "branch": "master", "commit": "209b56a00fc0206d81db768b121b94d0daf48b64" },
