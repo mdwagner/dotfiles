@@ -3,9 +3,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     config = function()
-      local nvim_treesitter_configs = require("nvim-treesitter.configs")
-
-      nvim_treesitter_configs.setup({
+      require("nvim-treesitter.configs").setup({
         ensure_installed = {
           "bash",
           "css",
@@ -73,5 +71,16 @@ return {
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
     },
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("treesitter-context").setup({
+        mode = "topline",
+      })
+    end,
   },
 }
