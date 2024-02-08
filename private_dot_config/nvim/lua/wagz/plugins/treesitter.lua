@@ -83,4 +83,24 @@ return {
       })
     end,
   },
+  {
+    "wellle/context.vim",
+    init = function()
+      vim.g.context_enabled = 0
+      vim.g.context_presenter = "nvim-float"
+
+      vim.api.nvim_create_user_command("SwapContext", function()
+        vim.cmd [[TSContextToggle]]
+        vim.cmd [[ContextToggle]]
+      end, { desc = "Toggle both nvim-treesitter-context and context.vim" })
+      vim.api.nvim_create_user_command("SwapContextTS", function()
+        vim.cmd [[TSContextEnable]]
+        vim.cmd [[ContextDisable]]
+      end, { desc = "Enable nvim-treesitter-context and disable context.vim" })
+      vim.api.nvim_create_user_command("SwapContextVim", function()
+        vim.cmd [[TSContextDisable]]
+        vim.cmd [[ContextEnable]]
+      end, { desc = "Disable nvim-treesitter-context and enable context.vim" })
+    end,
+  },
 }

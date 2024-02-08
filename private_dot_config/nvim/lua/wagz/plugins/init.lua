@@ -1,3 +1,5 @@
+local group = require("wagz.autocommands")
+
 return {
   {
     "folke/tokyonight.nvim",
@@ -103,7 +105,7 @@ return {
       }
 
       vim.api.nvim_create_autocmd("TermOpen", {
-        group = vim.api.nvim_create_augroup("NEW_TERMINAL_WHITESPACE", {}),
+        group = group,
         pattern = "*",
         command = "DisableWhitespace",
       })
@@ -147,7 +149,7 @@ return {
       vim.keymap.set("n", "<leader>p", ":Neoformat<CR>", { silent = true })
 
       vim.api.nvim_create_autocmd("BufWritePre", {
-        group = vim.api.nvim_create_augroup("AUTOFORMAT", {}),
+        group = group,
         pattern = {
           "*.lua",
         },
@@ -223,18 +225,6 @@ return {
   },
   {
     "ahmedkhalf/project.nvim",
-    config = function()
-      vim.api.nvim_create_autocmd("User", {
-        group = vim.api.nvim_create_augroup("WAGZ_PROJECT_NVIM", {}),
-        pattern = "WagzProjectNvim",
-        callback = function()
-          require("project_nvim").setup()
-        end,
-        once = true,
-      })
-
-      vim.cmd [[doautocmd User WagzProjectNvim]]
-    end,
   },
   {
     "lewis6991/gitsigns.nvim",

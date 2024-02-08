@@ -7,11 +7,5 @@
 --     \|____________|\|__|\|__|\|_______|\|_______|
 
 require("wagz.options")
+require("wagz.autocommands")
 require("wagz.lazy")
-
-vim.api.nvim_create_autocmd("User", {
-  pattern = "VeryLazy",
-  callback = function()
-    require("wagz.autocommands")
-  end,
-})

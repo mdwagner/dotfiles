@@ -1,5 +1,7 @@
+local group = vim.api.nvim_create_augroup("WAGZ", {})
+
 vim.api.nvim_create_autocmd("TermOpen", {
-  group = vim.api.nvim_create_augroup("WAGZ_NEW_TERMINAL", {}),
+  group = group,
   pattern = "*",
   callback = function()
     vim.opt_local.number = false
@@ -8,7 +10,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
   end,
 })
 vim.api.nvim_create_autocmd("TextYankPost", {
-  group = vim.api.nvim_create_augroup("WAGZ_HIGHLIGHT_YANK", {}),
+  group = group,
   pattern = "*",
   callback = function()
     vim.highlight.on_yank({
@@ -17,23 +19,25 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
-  group = vim.api.nvim_create_augroup("WAGZ_BATS_BASH_EXT", {}),
+  group = group,
   pattern = "*.bats",
   callback = function()
     vim.opt.filetype = "bash"
   end,
 })
 vim.api.nvim_create_autocmd("FileType", {
-  group = vim.api.nvim_create_augroup("WAGZ_GIT_EDITING", {}),
+  group = group,
   pattern = { "gitcommit", "gitrebase", "gitconfig" },
   callback = function()
     vim.opt.bufhidden = "delete"
   end,
 })
 vim.api.nvim_create_autocmd("WinNew", {
-  group = vim.api.nvim_create_augroup("WAGZ_DISABLE_FOLDING", {}),
+  group = group,
   pattern = "*",
   callback = function()
     vim.opt.foldenable = false
   end,
 })
+
+return group
