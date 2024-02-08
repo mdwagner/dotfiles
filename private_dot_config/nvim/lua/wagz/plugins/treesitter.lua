@@ -91,6 +91,7 @@ return {
       vim.g.context_highlight_normal = "NormalFloat"
       vim.g.context_highlight_border = "FloatBorder"
       vim.g.context_highlight_tag = "<hide>"
+      vim.g.context_filetype_blacklist = { "help" }
     end,
   },
 }
