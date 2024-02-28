@@ -30,6 +30,10 @@ return {
     config = function()
       vim.opt.showmode = false
 
+      local filetype_only = function()
+        return vim.bo.filetype or ""
+      end
+
       require("lualine").setup({
         options = {
           theme = "tokyonight",
@@ -44,6 +48,16 @@ return {
           lualine_y = { "progress" },
           lualine_z = { "location" },
         },
+        inactive_sections = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = {
+            { "filename", path = 3 },
+          },
+          lualine_x = { filetype_only },
+          lualine_y = { "progress" },
+          lualine_z = { "location" },
+        },
         tabline = {
           lualine_a = { "tabs" },
           lualine_b = {
@@ -53,6 +67,12 @@ return {
           lualine_x = {},
           lualine_y = {},
           lualine_z = {},
+        },
+        extensions = {
+          "fugitive",
+          "nvim-tree",
+          "oil",
+          "quickfix",
         },
       })
     end,

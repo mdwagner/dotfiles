@@ -87,11 +87,12 @@ return {
   {
     "wellle/context.vim",
     init = function()
+      vim.g.context_enabled = 0
       vim.g.context_presenter = "nvim-float"
       vim.g.context_highlight_normal = "NormalFloat"
       vim.g.context_highlight_border = "FloatBorder"
       vim.g.context_highlight_tag = "<hide>"
-      vim.g.context_filetype_blacklist = { "help" }
+      vim.g.context_filetype_blacklist = { "help", "tutor" }
     end,
   },
 }

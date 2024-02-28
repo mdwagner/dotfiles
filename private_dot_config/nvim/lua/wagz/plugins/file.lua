@@ -3,6 +3,7 @@ return {
     "kyazdani42/nvim-tree.lua",
     dependencies = {
       "nvim-tree/nvim-web-devicons",
+      "stevearc/oil.nvim",
     },
     config = function()
       local nvim_tree = require("nvim-tree")
@@ -107,12 +108,6 @@ return {
       nvim_tree.setup({
         on_attach = on_attach,
         view = {
-          float = {
-            enable = true,
-          },
-          width = {
-            min = 50,
-          },
           signcolumn = "auto",
         },
         actions = {
@@ -124,8 +119,16 @@ return {
             },
           },
           change_dir = {
-            global = true,
+            enable = false,
           },
+        },
+        disable_netrw = false,
+        hijack_netrw = true,
+        hijack_directories = {
+          enable = false,
+        },
+        filesystem_watchers = {
+          enable = false,
         },
       })
     end,
