@@ -1,0 +1,17 @@
+[settings]
+experimental = true
+
+[tools]
+node = "22.3.0"
+crystal = "1.12.2"
+neovim = "0.9.4"
+deno = "1.44.2"
+ruby = "3.2.2"
+zig = "0.13.0"
+chezmoi = "2.49.0"
+"lua-language-server" = "3.9.3"
+go = "1.21.2"
+bun = "1.1.13"
+rust = "latest"
+zellij = "latest"
+usage = "latest"
