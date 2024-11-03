@@ -6,3 +6,5 @@ typescript-language-server
 typescript
 vim-language-server
 vscode-langservers-extracted
+stimulus-language-server
+@tailwindcss/language-server

@@ -4,7 +4,7 @@ experimental = true
 [tools]
 node = "22.3.0"
 crystal = "1.12.2"
-neovim = "0.9.4"
+neovim = "0.10.2"
 deno = "1.44.2"
 ruby = "3.2.2"
 zig = "0.13.0"
