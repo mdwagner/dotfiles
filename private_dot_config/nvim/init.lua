@@ -325,6 +325,15 @@ require("lazy").setup({
     end,
   },
   {
+    "garymjr/nvim-snippets",
+    dependencies = {
+      "rafamadriz/friendly-snippets",
+    },
+    opts = {
+      friendly_snippets = true,
+    },
+  },
+  {
     "neovim/nvim-lspconfig",
   },
   {
@@ -335,6 +344,7 @@ require("lazy").setup({
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
       "neovim/nvim-lspconfig",
+      "garymjr/nvim-snippets",
     },
     config = function()
       local M = {}
@@ -459,6 +469,7 @@ require("lazy").setup({
       cmp.setup({
         sources = {
           { name = "nvim_lsp" },
+          { name = "snippets" },
           { name = "buffer" },
         },
         snippet = {
@@ -481,6 +492,13 @@ require("lazy").setup({
             select = false,
             behavior = cmp.ConfirmBehavior.Replace,
           }),
+          ["<Tab>"] = cmp.mapping(function(fallback)
+            if vim.snippet.active({ direction = 1 }) then
+              vim.snippet.jump(1)
+            else
+              fallback()
+            end
+          end),
           ["<C-n>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
@@ -520,6 +538,9 @@ require("lazy").setup({
         }, {
           { name = "cmdline" },
         }),
+        matching = {
+          disallow_symbol_nonprefix_matching = false,
+        },
       })
     end,
   },
