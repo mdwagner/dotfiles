@@ -65,22 +65,20 @@ function M.diagnostic_setqflist()
   return vim.diagnostic.setqflist({ title = "All Diagnostics" })
 end
 
-function M.async_format()
-  vim.lsp.buf.format({ async = true })
-end
-
 function M.local_rails_handler(name, command)
   return function()
     if M.current_jobs[name] then
       return
     end
     vim.cmd [[tabnew]]
-    local channel_id = vim.fn.termopen(command, { on_exit = function(_, code)
-      if code ~= 0 then
-        print(name .. " exited with code " .. code)
+    local channel_id = vim.fn.termopen(command, {
+      on_exit = function(_, code)
+        if code ~= 0 then
+          print(name .. " exited with code " .. code)
+        end
+        M.current_jobs[name] = nil
       end
-      M.current_jobs[name] = nil
-    end })
+    })
     if channel_id > 0 then
       M.current_jobs[name] = channel_id
     end
@@ -164,7 +162,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, opts) -- TODO: remove
     vim.keymap.set("n", "grn", vim.lsp.buf.rename, opts)           -- TODO: remove
     -- default: `gq` is mapped to `vim.lsp.formatexpr()`
-    vim.keymap.set("n", "<space>f", M.async_format, opts)
+    vim.keymap.set("n", "<space>f", vim.lsp.buf.format, opts)
     vim.keymap.set("n", "gra", vim.lsp.buf.code_action, opts)    -- TODO: remove
     vim.keymap.set("n", "gO", vim.lsp.buf.document_symbol, opts) -- TODO: remove
   end
@@ -178,7 +176,8 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
   border = "single",
 })
 
-vim.api.nvim_create_user_command("LocalRailsServer", M.local_rails_handler("term-server", "bundle exec rails s -b 0.0.0.0 -p 3000"), {})
+vim.api.nvim_create_user_command("LocalRailsServer",
+  M.local_rails_handler("term-server", "bundle exec rails s -b 0.0.0.0 -p 3000"), {})
 vim.api.nvim_create_user_command("LocalRailsSidekiq", M.local_rails_handler("term-sidekiq", "bundle exec sidekiq"), {})
 vim.api.nvim_create_user_command("LocalRailsAssets", M.local_rails_handler("term-assets", "bin/dev"), {})
 vim.api.nvim_create_user_command("LocalRailsConsole", M.local_rails_handler("term-console", "bundle exec rails c"), {})
@@ -276,12 +275,41 @@ require("lazy").setup({
         "fugitive",
         "oil",
         "quickfix",
+        "lazy",
+        "man",
       },
     },
   },
   {
-    "tpope/vim-surround",
-    event = "VeryLazy",
+    "echasnovski/mini.surround",
+    version = "*",
+    opts = {
+      -- tpope/vim-surround mappings
+      mappings = {
+        add = "ys",
+        delete = "ds",
+        find = "",
+        find_left = "",
+        highlight = "",
+        replace = "cs",
+        update_n_lines = "",
+
+        -- Add this only if you don't want to use extended mappings
+        suffix_last = "",
+        suffix_next = "",
+      },
+      search_method = "cover_or_next",
+    },
+    config = function(_, opts)
+      require("mini.surround").setup(opts)
+
+      -- Remap adding surrounding to Visual mode selection
+      vim.keymap.del("x", "ys")
+      vim.keymap.set("x", "S", ":<C-u>lua MiniSurround.add('visual')<CR>", { silent = true })
+
+      -- Make special mapping for "add surrounding for line"
+      vim.keymap.set("n", "yss", "ys_", { remap = true })
+    end,
   },
   {
     "ntpeters/vim-better-whitespace",
@@ -311,10 +339,9 @@ require("lazy").setup({
   },
   {
     "tpope/vim-fugitive",
-    init = function()
-      -- TODO: determine if still necessary because of lualine
-      vim.opt.statusline:append("%{fugitive#statusline()}")
-    end,
+    cmd = {
+      "Git",
+    },
   },
   {
     "christoomey/vim-tmux-navigator",
@@ -527,7 +554,12 @@ require("lazy").setup({
   },
   {
     "mtth/scratch.vim",
-    event = "VeryLazy",
+    cmd = {
+      "Scratch",
+      "ScratchInsert",
+      "ScratchSelection",
+      "ScratchPreview",
+    },
     init = function()
       vim.g.scratch_persistence_file = "~/.scratch.vim"
     end,
@@ -583,18 +615,22 @@ require("lazy").setup({
       "nvim-telescope/telescope-fzy-native.nvim",
     },
     keys = {
-      { "<leader>b", function() require("telescope.builtin").buffers() end, silent = true },
+      { "<leader>b", function() require("telescope.builtin").buffers() end,  silent = true },
       { "<leader>B", function() require("telescope.builtin").oldfiles() end, silent = true },
-      { "<leader>t", function()
-        local builtin = require("telescope.builtin")
-        vim.fn.system("git rev-parse --is-inside-work-tree")
-        if vim.v.shell_error == 0 then
-          builtin.git_files()
-        else
-          builtin.find_files()
-        end
-      end, silent = true },
-      { "<leader>fg", function() require("telescope.builtin").live_grep() end, silent = true },
+      {
+        "<leader>t",
+        function()
+          local builtin = require("telescope.builtin")
+          vim.fn.system("git rev-parse --is-inside-work-tree")
+          if vim.v.shell_error == 0 then
+            builtin.git_files()
+          else
+            builtin.find_files()
+          end
+        end,
+        silent = true
+      },
+      { "<leader>fg", function() require("telescope.builtin").live_grep() end,                 silent = true },
       { "<leader>fs", function() require("telescope.builtin").current_buffer_fuzzy_find() end, silent = true },
     },
     config = function()
