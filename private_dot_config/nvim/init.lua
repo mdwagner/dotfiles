@@ -83,6 +83,16 @@ function M.tabs_fmt(_, context)
   return name
 end
 
+function M.tabs_filename_cond()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local has_no_name = vim.fn.bufname(bufnr) == ""
+  local has_no_file = vim.fn.expand('%:p') == ""
+  if has_no_name or has_no_file then
+    return false
+  end
+  return true
+end
+
 function M.diagnostic_setqflist()
   return vim.diagnostic.setqflist({ title = "All Diagnostics" })
 end
@@ -328,7 +338,8 @@ require("lazy").setup({
             "filename",
             file_status = false,
             newfile_status = false,
-            path = 3
+            path = 3,
+            cond = M.tabs_filename_cond,
           },
         },
         lualine_y = {},
@@ -874,6 +885,21 @@ require("lazy").setup({
           type = "fold_size",
           postfix = " lines",
         },
+      },
+    },
+  },
+  {
+    "echasnovski/mini.notify",
+    version = "*",
+    lazy = false,
+    opts = {
+      content = {
+        format = function(notif)
+          return notif.msg
+        end,
+      },
+      lsp_progress = {
+        enable = false,
       },
     },
   },
