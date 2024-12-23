@@ -61,6 +61,28 @@ function M.filetype_only()
   return vim.bo.filetype or ""
 end
 
+function M.tabs_fmt(_, context)
+  local name = string.format("Tab %i", context.tabnr)
+  if vim.api.nvim_tabpage_is_valid(context.tabnr) then
+    local tab_winnrs = vim.tbl_filter(
+      function(winnr)
+        -- floating window
+        if vim.api.nvim_win_get_config(winnr).zindex then
+          return false
+        end
+        return true
+      end,
+      vim.api.nvim_tabpage_list_wins(context.tabnr)
+    )
+    local count = #tab_winnrs
+
+    if count > 1 then
+      return string.format("%s (%i)", name, count)
+    end
+  end
+  return name
+end
+
 function M.diagnostic_setqflist()
   return vim.diagnostic.setqflist({ title = "All Diagnostics" })
 end
@@ -85,6 +107,36 @@ function M.local_rails_handler(name, command)
     vim.cmd("file " .. name)
     vim.cmd [[clo]]
   end
+end
+
+function M.telescope_buffers()
+  require("telescope.builtin").buffers()
+end
+
+function M.telescope_oldfiles()
+  require("telescope.builtin").oldfiles()
+end
+
+function M.telescope_live_grep()
+  require("telescope.builtin").live_grep()
+end
+
+function M.telescope_current_buffer_fuzzy_find()
+  require("telescope.builtin").current_buffer_fuzzy_find()
+end
+
+function M.telescope_command_t()
+  local builtin = require("telescope.builtin")
+  vim.fn.system("git rev-parse --is-inside-work-tree")
+  if vim.v.shell_error == 0 then
+    builtin.git_files()
+  else
+    builtin.find_files()
+  end
+end
+
+function M.mini_zoom()
+  require("mini.misc").zoom()
 end
 
 -- KEYMAPS
@@ -240,13 +292,12 @@ require("lazy").setup({
     opts = {
       options = {
         theme = "tokyonight",
+        always_show_tabline = true,
       },
       sections = {
         lualine_a = { "mode" },
         lualine_b = { "branch", "diff", "diagnostics" },
-        lualine_c = {
-          { "filename", path = 3 },
-        },
+        lualine_c = { "filename" },
         lualine_x = { "encoding", "fileformat", "filetype" },
         lualine_y = { "progress" },
         lualine_z = { "location" },
@@ -262,21 +313,33 @@ require("lazy").setup({
         lualine_z = { "location" },
       },
       tabline = {
-        lualine_a = { "tabs" },
-        lualine_b = {
-          { "filename", path = 4 },
+        lualine_a = {
+          {
+            "tabs",
+            max_length = vim.o.columns / 2,
+            mode = 1,
+            fmt = M.tabs_fmt,
+          },
         },
+        lualine_b = {},
         lualine_c = {},
-        lualine_x = {},
+        lualine_x = {
+          {
+            "filename",
+            file_status = false,
+            newfile_status = false,
+            path = 3
+          },
+        },
         lualine_y = {},
         lualine_z = {},
       },
       extensions = {
         "fugitive",
-        "oil",
         "quickfix",
         "lazy",
         "man",
+        "oil",
       },
     },
   },
@@ -353,11 +416,11 @@ require("lazy").setup({
       "TmuxNavigatePrevious",
     },
     keys = {
-      { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
-      { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
-      { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
-      { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
-      { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+      { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>",     silent = true },
+      { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>",     silent = true },
+      { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>",       silent = true },
+      { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>",    silent = true },
+      { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>", silent = true },
     },
   },
   {
@@ -615,23 +678,11 @@ require("lazy").setup({
       "nvim-telescope/telescope-fzy-native.nvim",
     },
     keys = {
-      { "<leader>b", function() require("telescope.builtin").buffers() end,  silent = true },
-      { "<leader>B", function() require("telescope.builtin").oldfiles() end, silent = true },
-      {
-        "<leader>t",
-        function()
-          local builtin = require("telescope.builtin")
-          vim.fn.system("git rev-parse --is-inside-work-tree")
-          if vim.v.shell_error == 0 then
-            builtin.git_files()
-          else
-            builtin.find_files()
-          end
-        end,
-        silent = true
-      },
-      { "<leader>fg", function() require("telescope.builtin").live_grep() end,                 silent = true },
-      { "<leader>fs", function() require("telescope.builtin").current_buffer_fuzzy_find() end, silent = true },
+      { "<leader>b",  M.telescope_buffers,                   silent = true },
+      { "<leader>B",  M.telescope_oldfiles,                  silent = true },
+      { "<leader>fg", M.telescope_live_grep,                 silent = true },
+      { "<leader>fs", M.telescope_current_buffer_fuzzy_find, silent = true },
+      { "<leader>t",  M.telescope_command_t,                 silent = true },
     },
     config = function()
       local telescope = require("telescope")
@@ -798,7 +849,7 @@ require("lazy").setup({
     lazy = false,
     config = true,
     keys = {
-      { "<leader>zz", function() require("mini.misc").zoom() end, silent = true },
+      { "<leader>zz", M.mini_zoom, silent = true },
     },
   },
   {
