@@ -164,6 +164,20 @@ function M.telescope_commands()
   require("telescope.builtin").commands()
 end
 
+function M.telescope_noop(_)
+end
+
+function M.telescope_buf_delete(prompt_bufnr)
+  local current_picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
+  for _, entry in ipairs(current_picker:get_multi_selection()) do
+    local bufnr = entry.bufnr
+    if bufnr ~= nil then
+      vim.api.nvim_buf_delete(bufnr, { force = true })
+    end
+  end
+  require("telescope.actions").close(prompt_bufnr)
+end
+
 function M.mini_zoom()
   require("mini.misc").zoom()
 end
@@ -803,57 +817,11 @@ require("lazy").setup({
       local telescope = require("telescope")
       local actions = require("telescope.actions")
 
-      local function noop(_) end
-
-      local function if_nil(a, b)
-        if a == nil then
-          return b
-        end
-        return a
-      end
-
-      local function entry_to_item(entry)
-        local text = entry.text
-
-        if not text then
-          if type(entry.value) == "table" then
-            text = entry.value.text
-          else
-            text = entry.value
-          end
-        end
-
-        return {
-          bufnr = entry.bufnr,
-          filename = require("telescope.from_entry").path(entry, false, false),
-          lnum = if_nil(entry.lnum, 1),
-          col = if_nil(entry.col, 1),
-          text = text,
-        }
-      end
-
-      local function buf_delete_selection(prompt_bufnr)
-        local picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
-
-        local items = {}
-        for _, entry in ipairs(picker:get_multi_selection()) do
-          table.insert(items, entry_to_item(entry))
-        end
-
-        actions.close(prompt_bufnr)
-
-        for _, item in ipairs(items) do
-          if item.bufnr ~= nil then
-            vim.api.nvim_buf_delete(item.bufnr, { force = true })
-          end
-        end
-      end
-
       telescope.setup {
         defaults = {
           mappings = {
             i = {
-              ["<esc>"] = actions.close,
+              ["<ESC>"] = actions.close,
               ["<Tab>"] = function(prompt_bufnr)
                 actions.toggle_selection(prompt_bufnr)
                 actions.move_selection_better(prompt_bufnr)
@@ -862,9 +830,9 @@ require("lazy").setup({
                 actions.toggle_selection(prompt_bufnr)
                 actions.move_selection_worse(prompt_bufnr)
               end,
-              ["<PageUp>"] = noop,
-              ["<PageDown>"] = noop,
-              ["<C-j>"] = noop,
+              ["<PageUp>"] = M.telescope_noop,
+              ["<PageDown>"] = M.telescope_noop,
+              ["<C-j>"] = M.telescope_noop,
             },
           },
           preview = {
@@ -878,9 +846,7 @@ require("lazy").setup({
             sort_mru = true,
             mappings = {
               i = {
-                ["<C-d>"] = function(prompt_bufnr)
-                  buf_delete_selection(prompt_bufnr)
-                end,
+                ["<C-d>"] = M.telescope_buf_delete,
               },
             },
           },
