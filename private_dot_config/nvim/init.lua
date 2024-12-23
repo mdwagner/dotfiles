@@ -61,13 +61,19 @@ function M.filetype_only()
   return vim.bo.filetype or ""
 end
 
+function M.is_floating_win(winnr)
+  if vim.api.nvim_win_get_config(winnr).zindex then
+    return true
+  end
+  return false
+end
+
 function M.tabs_fmt(_, context)
-  local name = string.format("Tab %i", context.tabnr)
+  local name = string.format("%i", context.tabnr)
   if vim.api.nvim_tabpage_is_valid(context.tabnr) then
     local tab_winnrs = vim.tbl_filter(
       function(winnr)
-        -- floating window
-        if vim.api.nvim_win_get_config(winnr).zindex then
+        if M.is_floating_win(winnr) then
           return false
         end
         return true
@@ -75,7 +81,6 @@ function M.tabs_fmt(_, context)
       vim.api.nvim_tabpage_list_wins(context.tabnr)
     )
     local count = #tab_winnrs
-
     if count > 1 then
       return string.format("%s (%i)", name, count)
     end
@@ -145,17 +150,52 @@ function M.telescope_command_t()
   end
 end
 
+function M.telescope_help_tags()
+  require("telescope.builtin").help_tags()
+end
+
+function M.telescope_dot_config()
+  require("telescope.builtin").find_files({
+    cwd = "~/.config",
+  })
+end
+
+function M.telescope_commands()
+  require("telescope.builtin").commands()
+end
+
 function M.mini_zoom()
   require("mini.misc").zoom()
 end
 
 -- KEYMAPS
-vim.keymap.set("n", "<leader>cc", "gcc", { silent = true, remap = true })
-vim.keymap.set("v", "<leader>cc", "gc", { silent = true, remap = true })
-vim.keymap.set("v", "<leader>c<space>", "gc", { silent = true, remap = true })
-vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, { silent = true })
-vim.keymap.set("n", "<space>q", M.diagnostic_setqflist, { silent = true })
-vim.keymap.set("n", "<space>l", vim.diagnostic.setloclist, { silent = true })
+vim.keymap.set("n", "<leader>cc", "gcc", {
+  silent = true,
+  remap = true,
+  desc = "Comment or uncomment lines starting at cursor"
+})
+vim.keymap.set("v", "<leader>cc", "gc", {
+  silent = true,
+  remap = true,
+  desc = "Comment or uncomment lines"
+})
+vim.keymap.set("v", "<leader>c<space>", "gc", {
+  silent = true,
+  remap = true,
+  desc = "Comment or uncomment lines"
+})
+vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, {
+  silent = true,
+  desc = "Show diagnostics in a floating window"
+})
+vim.keymap.set("n", "<space>q", M.diagnostic_setqflist, {
+  silent = true,
+  desc = "Add buffer diagnostics to the quickfix list"
+})
+vim.keymap.set("n", "<space>l", vim.diagnostic.setloclist, {
+  silent = true,
+  desc = "Add buffer diagnostics to the location list"
+})
 
 -- AUTOCOMMANDS
 local group = vim.api.nvim_create_augroup("WAGZ", {})
@@ -199,6 +239,12 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt.bufhidden = "delete"
   end,
 })
+vim.api.nvim_create_autocmd("FileType", {
+  group = group,
+  desc = "Set the help window to open at the top",
+  pattern = "help",
+  command = [[wincmd K]],
+})
 vim.api.nvim_create_autocmd("User", {
   group = group,
   pattern = "TelescopePreviewerLoaded",
@@ -207,26 +253,71 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 vim.api.nvim_create_autocmd("LspAttach", {
+  group = group,
   desc = "LSP actions",
   callback = function(event)
-    local opts = { buffer = event.buf, silent = true }
-
     -- default: 'omnifunc' is set to `vim.lsp.omnifunc()`
     --   i_CTRL-X_CTRL-O
     -- default: 'tagfunc' is set to `vim.lsp.tagfunc()`
     --   go-to-definition, :tjump, CTRL-], CTRL-W_], CTRL-W_}
     -- default: `K` is mapped to `vim.lsp.buf.hover()`
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-    vim.keymap.set("n", "gri", vim.lsp.buf.implementation, opts)   -- TODO: remove
-    vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, opts)
-    vim.keymap.set("n", "grr", vim.lsp.buf.references, opts)       -- TODO: remove
-    vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, opts) -- TODO: remove
-    vim.keymap.set("n", "grn", vim.lsp.buf.rename, opts)           -- TODO: remove
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
+      silent = true,
+      buffer = event.buf,
+      desc = "Jumps to the definition of the symbol under the cursor",
+    })
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {
+      silent = true,
+      buffer = event.buf,
+      desc = "Jumps to the declaration of the symbol under the cursor",
+    })
+    -- TODO: remove
+    vim.keymap.set("n", "gri", vim.lsp.buf.implementation, {
+      silent = true,
+      buffer = event.buf,
+      desc = "Lists all the implementations for the symbol under the cursor in the quickfix window",
+    })
+    vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, {
+      silent = true,
+      buffer = event.buf,
+      desc = "Jumps to the definition of the type of the symbol under the cursor",
+    })
+    -- TODO: remove
+    vim.keymap.set("n", "grr", vim.lsp.buf.references, {
+      silent = true,
+      buffer = event.buf,
+      desc = "Lists all the references to the symbol under the cursor in the quickfix window",
+    })
+    -- TODO: remove
+    vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, {
+      silent = true,
+      buffer = event.buf,
+      desc = "Displays signature information about the symbol under the cursor in a floating window",
+    })
+    -- TODO: remove
+    vim.keymap.set("n", "grn", vim.lsp.buf.rename, {
+      silent = true,
+      buffer = event.buf,
+      desc = "Renames all references to the symbol under the cursor",
+    })
     -- default: `gq` is mapped to `vim.lsp.formatexpr()`
-    vim.keymap.set("n", "<space>f", vim.lsp.buf.format, opts)
-    vim.keymap.set("n", "gra", vim.lsp.buf.code_action, opts)    -- TODO: remove
-    vim.keymap.set("n", "gO", vim.lsp.buf.document_symbol, opts) -- TODO: remove
+    vim.keymap.set("n", "<space>f", vim.lsp.buf.format, {
+      silent = true,
+      buffer = event.buf,
+      desc = "Formats a buffer using the attached (and optionally filtered) language server clients",
+    })
+    -- TODO: remove
+    vim.keymap.set("n", "gra", vim.lsp.buf.code_action, {
+      silent = true,
+      buffer = event.buf,
+      desc = "Selects a code action available at the current cursor position",
+    })
+    -- TODO: remove
+    vim.keymap.set("n", "gO", vim.lsp.buf.document_symbol, {
+      silent = true,
+      buffer = event.buf,
+      desc = "Lists all symbols in the current buffer in the quickfix window",
+    })
   end
 })
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
@@ -239,16 +330,26 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
 })
 
 vim.api.nvim_create_user_command("LocalRailsServer",
-  M.local_rails_handler("term-server", "bundle exec rails s -b 0.0.0.0 -p 3000"), {})
-vim.api.nvim_create_user_command("LocalRailsSidekiq", M.local_rails_handler("term-sidekiq", "bundle exec sidekiq"), {})
-vim.api.nvim_create_user_command("LocalRailsAssets", M.local_rails_handler("term-assets", "bin/dev"), {})
-vim.api.nvim_create_user_command("LocalRailsConsole", M.local_rails_handler("term-console", "bundle exec rails c"), {})
+  M.local_rails_handler("term-server", "bundle exec rails s -b 0.0.0.0 -p 3000"), {
+    desc = "Start local Ruby on Rails server",
+  })
+vim.api.nvim_create_user_command("LocalRailsSidekiq", M.local_rails_handler("term-sidekiq", "bundle exec sidekiq"), {
+  desc = "Start local Ruby on Rails Sidekiq instance",
+})
+vim.api.nvim_create_user_command("LocalRailsAssets", M.local_rails_handler("term-assets", "bin/dev"), {
+  desc = "Start local Ruby on Rails dev tools (e.g. Tailwind, etc.)",
+})
+vim.api.nvim_create_user_command("LocalRailsConsole", M.local_rails_handler("term-console", "bundle exec rails c"), {
+  desc = "Start local Ruby on Rails dev console",
+})
 vim.api.nvim_create_user_command("LocalRailsAll", function()
   vim.cmd [[LocalRailsServer]]
   vim.cmd [[LocalRailsSidekiq]]
   vim.cmd [[LocalRailsAssets]]
   vim.cmd [[LocalRailsConsole]]
-end, {})
+end, {
+  desc = "Start all local LocalRails* commands",
+})
 
 -- Snippets (see https://cmp.saghen.dev/configurations/snippets.html#custom-snippets)
 
@@ -689,11 +790,14 @@ require("lazy").setup({
       "nvim-telescope/telescope-fzy-native.nvim",
     },
     keys = {
-      { "<leader>b",  M.telescope_buffers,                   silent = true },
-      { "<leader>B",  M.telescope_oldfiles,                  silent = true },
-      { "<leader>fg", M.telescope_live_grep,                 silent = true },
-      { "<leader>fs", M.telescope_current_buffer_fuzzy_find, silent = true },
-      { "<leader>t",  M.telescope_command_t,                 silent = true },
+      { "<leader>b",  M.telescope_buffers,                   silent = true, desc = "Telescope buffers" },
+      { "<leader>B",  M.telescope_oldfiles,                  silent = true, desc = "Telescope oldfiles" },
+      { "<leader>fg", M.telescope_live_grep,                 silent = true, desc = "Telescope live_grep" },
+      { "<leader>fs", M.telescope_current_buffer_fuzzy_find, silent = true, desc = "Telescope current_buffer_fuzzy_find" },
+      { "<leader>fh", M.telescope_help_tags,                 silent = true, desc = "Telescope help_tags" },
+      { "<leader>fc", M.telescope_dot_config,                silent = true, desc = "Telescope find_files in ~/.config" },
+      { "<leader>fm", M.telescope_commands,                  silent = true, desc = "Telescope commands" },
+      { "<leader>t",  M.telescope_command_t,                 silent = true, desc = "Telescope find_files or git_files (if inside .git directory)" },
     },
     config = function()
       local telescope = require("telescope")
@@ -900,6 +1004,18 @@ require("lazy").setup({
       },
       lsp_progress = {
         enable = false,
+      },
+    },
+  },
+  {
+    "chrisgrieser/nvim-early-retirement",
+    event = "VeryLazy",
+    opts = {
+      retirementAgeMins = 45,
+      minimumBufferNum = 30,
+      notificationOnAutoClose = true,
+      ignoredFiletypes = {
+        "terminal",
       },
     },
   },
