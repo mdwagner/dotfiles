@@ -498,28 +498,6 @@ require("lazy").setup({
     end,
   },
   {
-    "ntpeters/vim-better-whitespace",
-    init = function()
-      vim.g.better_whitespace_filetypes_blacklist = {
-        "diff",
-        "git",
-        "gitcommit",
-        "unite",
-        "qf",
-        "help",
-        "markdown",
-        "fugitive",
-        "terminal",
-      }
-
-      vim.api.nvim_create_autocmd("TermOpen", {
-        group = group,
-        pattern = "*",
-        command = "DisableWhitespace",
-      })
-    end,
-  },
-  {
     "sickill/vim-pasta",
     event = "VeryLazy",
   },
@@ -762,9 +740,6 @@ require("lazy").setup({
   },
   {
     "stevearc/oil.nvim",
-    keys = {
-      { "-", ":Oil<CR>", desc = "Open parent directory", silent = true },
-    },
     opts = {
       default_file_explorer = true,
       columns = {
@@ -802,6 +777,14 @@ require("lazy").setup({
         ["yp"] = "actions.copy_entry_path",
       },
     },
+    config = function(_, opts)
+      require("oil").setup(opts)
+
+      vim.keymap.set("n", "-", ":Oil<CR>", {
+        desc = "Open parent directory",
+        silent = true,
+      })
+    end,
   },
   {
     "nvim-telescope/telescope.nvim",
@@ -935,10 +918,12 @@ require("lazy").setup({
     "echasnovski/mini.misc",
     version = "*",
     lazy = false,
-    config = true,
     keys = {
       { "<leader>zz", M.mini_zoom, silent = true },
     },
+    config = function()
+      require("mini.misc").setup()
+    end,
   },
   {
     "OXY2DEV/foldtext.nvim",
@@ -991,5 +976,13 @@ require("lazy").setup({
         "terminal",
       },
     },
+  },
+  {
+    "echasnovski/mini.trailspace",
+    version = "*",
+    lazy = false,
+    config = function()
+      require("mini.trailspace").setup()
+    end,
   },
 })
