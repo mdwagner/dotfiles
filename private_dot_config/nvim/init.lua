@@ -21,18 +21,15 @@ vim.opt.splitright = true
 vim.opt.hlsearch = false
 vim.opt.mouse = ""
 vim.opt.shortmess = "I"
-vim.opt.completeopt = { "menu", "menuone", "noselect" }
 vim.opt.showmode = false
+vim.opt.foldenable = false
 
 vim.g.mapleader = ","
-vim.g.maplocalleader = ","
+vim.g.maplocalleader = vim.g.mapleader
 vim.g.loaded_python_provider = 0
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
-vim.g.markdown_fenced_languages = {
-  "ts=typescript",
-}
 
 if vim.fn.executable("rg") == 1 then
   vim.opt.grepprg = "rg --vimgrep"
@@ -54,7 +51,7 @@ if vim.fn.has("win32") == 1 then
 end
 
 local M = {
-  current_jobs = {},
+  _current_jobs = {},
 }
 
 function M.filetype_only()
@@ -104,7 +101,7 @@ end
 
 function M.local_rails_handler(name, command)
   return function()
-    if M.current_jobs[name] then
+    if M._current_jobs[name] then
       return
     end
     vim.cmd [[tabnew]]
@@ -113,11 +110,11 @@ function M.local_rails_handler(name, command)
         if code ~= 0 then
           print(name .. " exited with code " .. code)
         end
-        M.current_jobs[name] = nil
+        M._current_jobs[name] = nil
       end
     })
     if channel_id > 0 then
-      M.current_jobs[name] = channel_id
+      M._current_jobs[name] = channel_id
     end
     vim.cmd("file " .. name)
     vim.cmd [[clo]]
@@ -674,8 +671,8 @@ require("lazy").setup({
         ["<C-e>"] = { "cancel", "fallback" },
         ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
 
-        ["<C-n>"] = { "select_next", "fallback" },
-        ["<C-p>"] = { "select_prev", "fallback" },
+        ["<C-n>"] = { "select_next", "show" },
+        ["<C-p>"] = { "select_prev", "show" },
 
         ["<C-k>"] = { "scroll_documentation_up", "fallback" },
         ["<C-j>"] = { "scroll_documentation_down", "fallback" },
@@ -686,21 +683,43 @@ require("lazy").setup({
         cmdline = {
           preset = "none",
 
-          ["<C-e>"] = { "cancel", "fallback" },
+          ["<CR>"] = { "accept", "fallback" },
+          ["<C-e>"] = { "cancel" },
 
-          ["<C-n>"] = { "select_next", "fallback" },
-          ["<C-p>"] = { "select_prev", "fallback" },
+          ["<C-n>"] = { "select_next" },
+          ["<C-p>"] = { "select_prev" },
 
-          ["<Tab>"] = { "select_next", "fallback" },
-          ["<S-Tab>"] = { "select_prev", "fallback" },
+          ["<Tab>"] = { "select_next" },
+          ["<S-Tab>"] = { "select_prev" },
         },
       },
       completion = {
         list = {
-          selection = "auto_insert",
+          selection = function(ctx)
+            return ctx.mode == "cmdline" and "manual" or "preselect"
+          end,
         },
         menu = {
           border = "rounded",
+          draw = {
+            components = {
+              kind_icon = {
+                ellipsis = false,
+                text = function(ctx)
+                  local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+                  return kind_icon
+                end,
+                -- Optionally, you may also use the highlights from mini.icons
+                highlight = function(ctx)
+                  local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+                  return hl
+                end,
+              },
+            },
+          },
+          auto_show = function(ctx)
+            return ctx.mode ~= "cmdline" or not vim.tbl_contains({ "/", "?" }, vim.fn.getcmdtype())
+          end,
         },
         documentation = {
           window = {
@@ -719,18 +738,6 @@ require("lazy").setup({
       },
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
-        cmdline = function()
-          local type = vim.fn.getcmdtype()
-          -- Search forward and backward
-          if type == "/" or type == "?" then
-            return { "buffer" }
-          end
-          -- Commands
-          if type == ":" then
-            return { "path", "cmdline" }
-          end
-          return {}
-        end,
       },
       signature = {
         enabled = true,
