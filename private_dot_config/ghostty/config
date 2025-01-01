@@ -1,0 +1,17 @@
+auto-update = off
+theme = tokyonight
+font-family = CaskaydiaCove Nerd Font
+font-size = 12
+font-feature = -calt
+bold-is-bright = true
+mouse-hide-while-typing = true
+scrollback-limit = 10000
+command = /usr/bin/fish
+shell-integration = fish
+shell-integration-features = no-cursor
+cursor-style = block
+cursor-style-blink = false
+background-opacity = 1
+window-theme = dark
+window-padding-y = 1
+window-padding-x = 1
