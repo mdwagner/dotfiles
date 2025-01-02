@@ -15,3 +15,5 @@ background-opacity = 1
 window-theme = dark
 window-padding-y = 1
 window-padding-x = 1
+
+config-file = ?platform_config
