@@ -187,6 +187,10 @@ function M.blink_show_select_prev(cmp)
   })
 end
 
+function M.blink_dictionary(cmp)
+  cmp.show({ providers = { "dictionary" } })
+end
+
 -- KEYMAPS
 vim.keymap.set("n", "<leader>cc", "gcc", {
   silent = true,
@@ -571,6 +575,7 @@ require("lazy").setup({
     "neovim/nvim-lspconfig",
     dependencies = {
       "saghen/blink.cmp",
+      "netmute/ctags-lsp.nvim",
     },
     opts = {
       servers = {
@@ -629,6 +634,9 @@ require("lazy").setup({
         vimls = {},
         zls = {},
         standardrb = {},
+        ctags_lsp = {
+          filetypes = { "ruby" },
+        },
         -- ruby_lsp = {},
         -- stimulus_ls = {},
         -- tailwindcss = {},
@@ -643,10 +651,26 @@ require("lazy").setup({
     end,
   },
   {
+    "saghen/blink.compat",
+    version = "*",
+    lazy = true,
+    opts = {},
+  },
+  {
     "saghen/blink.cmp",
     lazy = false,
     dependencies = {
       "rafamadriz/friendly-snippets",
+      {
+        "uga-rosa/cmp-dictionary",
+        main = "cmp_dictionary",
+        opts = {
+          paths = { "/usr/share/dict/words" },
+          exact_length = 2,
+          first_case_insensitive = true,
+          max_number_items = 50,
+        },
+      },
     },
     version = "v0.*",
     opts = {
@@ -665,6 +689,8 @@ require("lazy").setup({
 
         ["<Tab>"] = { "snippet_forward", "fallback" },
         ["<S-Tab>"] = { "snippet_backward", "fallback" },
+
+        ["<C-i>"] = { M.blink_dictionary },
 
         cmdline = {
           preset = "none",
@@ -724,6 +750,12 @@ require("lazy").setup({
       },
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
+        providers = {
+          dictionary = {
+            name = "dictionary",
+            module = "blink.compat.source",
+          },
+        },
       },
       signature = {
         enabled = true,
