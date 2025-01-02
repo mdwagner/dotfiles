@@ -1,0 +1,30 @@
+[settings]
+experimental = true
+
+[settings.npm]
+bun = true
+
+[tools]
+bun = "latest"
+deno = "latest"
+node = "latest"
+"npm:prettier" = "latest"
+"npm:bash-language-server" = "latest"
+"npm:emmet-ls" = "latest"
+"npm:neovim" = "latest"
+"npm:typescript-language-server" = "latest"
+"npm:typescript" = "latest"
+"npm:vim-language-server" = "latest"
+"npm:vscode-langservers-extracted" = "latest"
+
+ruby = "3.2.2"
+"gem:bundler" = "latest"
+
+python = "latest"
+uv = "latest"
+"pipx:ansible-core" = { version = "latest", uvx_args = "--with ansible" }
+
+rust = "latest"
+"cargo:tree-sitter-cli" = "latest"
+
+"lua-language-server" = "latest"
