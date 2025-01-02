@@ -1,8 +1,7 @@
 {
+  "blink-cmp-dictionary": { "branch": "master", "commit": "73fcc14b9f6fa90fcf275fd59b7fc3197a03d0ce" },
   "blink.cmp": { "branch": "main", "commit": "d534f9e8bf39299c480e0c2e11dad21f51cfb2fe" },
-  "blink.compat": { "branch": "main", "commit": "5ca8848c8cc32abdc980e5db4f0eb7bb8fbf84dc" },
   "chezmoi.vim": { "branch": "main", "commit": "abf37336437867cbd99ce2f8849b717415391cc3" },
-  "cmp-dictionary": { "branch": "main", "commit": "c5ffc6afb7f3a68da981ed9c56f3d9d8f3d907b7" },
   "ctags-lsp.nvim": { "branch": "main", "commit": "aaae7b5d8dc7aeb836c63301b8eb7311af49bb2a" },
   "foldtext.nvim": { "branch": "main", "commit": "d6d050249a0fb529427843982b45af3a3f8a69f2" },
   "friendly-snippets": { "branch": "main", "commit": "efff286dd74c22f731cdec26a70b46e5b203c619" },

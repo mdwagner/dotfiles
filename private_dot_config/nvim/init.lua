@@ -161,9 +161,6 @@ function M.telescope_commands()
   require("telescope.builtin").commands()
 end
 
-function M.telescope_noop(_)
-end
-
 function M.telescope_buf_delete(prompt_bufnr)
   local current_picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
   for _, entry in ipairs(current_picker:get_multi_selection()) do
@@ -225,6 +222,7 @@ local group = vim.api.nvim_create_augroup("WAGZ", {})
 
 vim.api.nvim_create_autocmd("TermOpen", {
   group = group,
+  desc = "Set terminal defaults",
   pattern = "*",
   callback = function()
     vim.opt_local.number = false
@@ -234,6 +232,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
 })
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = group,
+  desc = "Enable highlight on yank",
   pattern = "*",
   callback = function()
     vim.highlight.on_yank({
@@ -243,6 +242,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
   group = group,
+  desc = "Set bats filetype to bash",
   pattern = "*.bats",
   callback = function()
     vim.opt.filetype = "bash"
@@ -250,6 +250,7 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 })
 vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
   group = group,
+  desc = "Set rabl filetype to ruby",
   pattern = "*.rabl",
   callback = function()
     vim.opt.filetype = "ruby"
@@ -257,6 +258,7 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 })
 vim.api.nvim_create_autocmd("FileType", {
   group = group,
+  desc = "Don't show git* filetypes in buffer list",
   pattern = { "gitcommit", "gitrebase", "gitconfig" },
   callback = function()
     vim.opt.bufhidden = "delete"
@@ -268,8 +270,27 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "help",
   command = [[wincmd K]],
 })
+vim.api.nvim_create_autocmd("FileType", {
+  group = group,
+  desc = "Blacklist mini.trailspace for filetypes",
+  pattern = {
+    "diff",
+    "git",
+    "gitcommit",
+    "unite",
+    "qf",
+    "help",
+    "markdown",
+    "fugitive",
+    "terminal",
+  },
+  callback = function(event)
+    vim.b[event.buf].minitrailspace_disable = true
+  end,
+})
 vim.api.nvim_create_autocmd("User", {
   group = group,
+  desc = "Wrap Telescope previewer",
   pattern = "TelescopePreviewerLoaded",
   callback = function()
     vim.opt_local.wrap = true
@@ -352,17 +373,16 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
   border = "single",
 })
 
-vim.api.nvim_create_user_command("LocalRailsServer",
-  M.local_rails_handler("term-server", "bundle exec rails s -b 0.0.0.0 -p 3000"), {
-    desc = "Start local Ruby on Rails server",
-  })
+vim.api.nvim_create_user_command("LocalRailsServer", M.local_rails_handler("term-server", "bin/rails s"), {
+  desc = "Start local Ruby on Rails server",
+})
 vim.api.nvim_create_user_command("LocalRailsSidekiq", M.local_rails_handler("term-sidekiq", "bundle exec sidekiq"), {
   desc = "Start local Ruby on Rails Sidekiq instance",
 })
 vim.api.nvim_create_user_command("LocalRailsAssets", M.local_rails_handler("term-assets", "bin/dev"), {
   desc = "Start local Ruby on Rails dev tools (e.g. Tailwind, etc.)",
 })
-vim.api.nvim_create_user_command("LocalRailsConsole", M.local_rails_handler("term-console", "bundle exec rails c"), {
+vim.api.nvim_create_user_command("LocalRailsConsole", M.local_rails_handler("term-console", "bin/rails c"), {
   desc = "Start local Ruby on Rails dev console",
 })
 vim.api.nvim_create_user_command("LocalRailsAll", function()
@@ -651,26 +671,11 @@ require("lazy").setup({
     end,
   },
   {
-    "saghen/blink.compat",
-    version = "*",
-    lazy = true,
-    opts = {},
-  },
-  {
     "saghen/blink.cmp",
     lazy = false,
     dependencies = {
       "rafamadriz/friendly-snippets",
-      {
-        "uga-rosa/cmp-dictionary",
-        main = "cmp_dictionary",
-        opts = {
-          paths = { "/usr/share/dict/words" },
-          exact_length = 2,
-          first_case_insensitive = true,
-          max_number_items = 50,
-        },
-      },
+      "Kaiser-Yang/blink-cmp-dictionary",
     },
     version = "v0.*",
     opts = {
@@ -734,6 +739,8 @@ require("lazy").setup({
           end,
         },
         documentation = {
+          auto_show = true,
+          auto_show_delay_ms = 2000,
           window = {
             border = "rounded",
           },
@@ -753,7 +760,29 @@ require("lazy").setup({
         providers = {
           dictionary = {
             name = "dictionary",
-            module = "blink.compat.source",
+            module = "blink-cmp-dictionary",
+            opts = {
+              prefix_min_len = 2,
+              get_command = {
+                "rg",
+                "--color=never",
+                "--no-line-number",
+                "--no-messages",
+                "--no-filename",
+                "--ignore-case",
+                "--",
+                "${prefix}",
+                "/usr/share/dict/words",
+              },
+              documentation = {
+                enable = true,
+                get_command = {
+                  "wn",
+                  "${word}",
+                  "-over",
+                },
+              },
+            },
           },
         },
       },
@@ -847,7 +876,7 @@ require("lazy").setup({
       local telescope = require("telescope")
       local actions = require("telescope.actions")
 
-      telescope.setup {
+      telescope.setup({
         defaults = {
           mappings = {
             i = {
@@ -860,9 +889,9 @@ require("lazy").setup({
                 actions.toggle_selection(prompt_bufnr)
                 actions.move_selection_worse(prompt_bufnr)
               end,
-              ["<PageUp>"] = M.telescope_noop,
-              ["<PageDown>"] = M.telescope_noop,
-              ["<C-j>"] = M.telescope_noop,
+              ["<PageUp>"] = function() end,
+              ["<PageDown>"] = function() end,
+              ["<C-j>"] = function() end,
             },
           },
           preview = {
@@ -894,7 +923,7 @@ require("lazy").setup({
           -- }
           -- please take a look at the readme of the extension you want to configure
         }
-      }
+      })
       telescope.load_extension("fzy_native")
     end,
   },
@@ -1000,10 +1029,12 @@ require("lazy").setup({
           return notif.msg
         end,
       },
-      lsp_progress = {
-        enable = false,
-      },
     },
+    config = function(_, opts)
+      local mini_notify = require("mini.notify")
+      mini_notify.setup(opts)
+      vim.notify = mini_notify.make_notify()
+    end,
   },
   {
     "chrisgrieser/nvim-early-retirement",
