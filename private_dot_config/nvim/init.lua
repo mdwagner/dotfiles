@@ -179,6 +179,14 @@ function M.mini_zoom()
   require("mini.misc").zoom()
 end
 
+function M.blink_show_select_prev(cmp)
+  cmp.show({
+    callback = function()
+      cmp.select_prev()
+    end,
+  })
+end
+
 -- KEYMAPS
 vim.keymap.set("n", "<leader>cc", "gcc", {
   silent = true,
@@ -650,7 +658,7 @@ require("lazy").setup({
         ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
 
         ["<C-n>"] = { "select_next", "show" },
-        ["<C-p>"] = { "select_prev", "show" },
+        ["<C-p>"] = { "select_prev", M.blink_show_select_prev },
 
         ["<C-k>"] = { "scroll_documentation_up", "fallback" },
         ["<C-j>"] = { "scroll_documentation_down", "fallback" },
