@@ -1,0 +1,5 @@
+require("wagz.config.options")
+require("wagz.config.keymaps")
+require("wagz.config.autocmds")
+require("wagz.config.commands")
+pcall(require, "wagz.config.global_vars")
