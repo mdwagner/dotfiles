@@ -10,10 +10,6 @@ local function dictionary(cmp)
   cmp.show({ providers = { "dictionary" } })
 end
 
-local function dictionary_docs_enable()
-  return vim.g.wagz_blink_dictionary_documentation_disabled and false or true
-end
-
 return {
   {
     "saghen/blink.cmp",
@@ -120,7 +116,7 @@ return {
                 "/usr/share/dict/words",
               },
               documentation = {
-                enable = dictionary_docs_enable(),
+                enable = true,
                 get_command = {
                   "wn",
                   "${word}",

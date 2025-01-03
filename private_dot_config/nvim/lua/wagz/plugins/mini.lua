@@ -1,3 +1,11 @@
+local function zoom()
+  require("mini.misc").zoom(nil, {
+    border = "solid",
+    title = "FLOATING",
+    title_pos = "center",
+  })
+end
+
 vim.api.nvim_create_autocmd("FileType", {
   group = require("wagz.util").augroup,
   desc = "Blacklist mini.trailspace for filetypes",
@@ -63,7 +71,7 @@ return {
     version = "*",
     lazy = false,
     keys = {
-      { "<leader>zz", function() require("mini.misc").zoom() end, silent = true },
+      { "<leader>zz", zoom, silent = true },
     },
     config = function()
       require("mini.misc").setup()
@@ -78,6 +86,9 @@ return {
         format = function(notif)
           return notif.msg
         end,
+      },
+      window = {
+        winblend = 0,
       },
     },
     config = function(_, opts)

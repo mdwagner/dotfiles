@@ -1,31 +1,6 @@
-local function buffers()
-  require("telescope.builtin").buffers()
-end
-
-local function oldfiles()
-  require("telescope.builtin").oldfiles()
-end
-
-local function live_grep()
-  require("telescope.builtin").live_grep()
-end
-
-local function current_buffer_fuzzy_find()
-  require("telescope.builtin").current_buffer_fuzzy_find()
-end
-
 local function command_t()
-  local builtin = require("telescope.builtin")
   vim.fn.system("git rev-parse --is-inside-work-tree")
-  if vim.v.shell_error == 0 then
-    builtin.git_files()
-  else
-    builtin.find_files()
-  end
-end
-
-local function help_tags()
-  require("telescope.builtin").help_tags()
+  return string.format("<cmd>Telescope %s<cr>", vim.v.shell_error == 0 and "git_files" or "find_files")
 end
 
 local function dot_config()
@@ -34,8 +9,21 @@ local function dot_config()
   })
 end
 
-local function commands()
-  require("telescope.builtin").commands()
+local function help_tags()
+  require("telescope.builtin").help_tags({
+    layout_strategy = "vertical",
+  })
+end
+
+local function buffers()
+  require("telescope.builtin").buffers({
+    layout_strategy = "vertical",
+  })
+end
+
+local function current_buffer_fuzzy_find()
+  local themes = require("telescope.themes")
+  require("telescope.builtin").current_buffer_fuzzy_find(themes.get_ivy())
 end
 
 local function buf_delete(prompt_bufnr)
@@ -58,6 +46,40 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
+vim.keymap.set("n", "<leader>b", buffers, {
+  desc = "Telescope buffers",
+  silent = true,
+})
+vim.keymap.set("n", "<leader>fo", "<cmd>Telescope oldfiles<cr>", {
+  desc = "Telescope oldfiles",
+  silent = true,
+})
+vim.keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", {
+  desc = "Telescope live_grep",
+  silent = true,
+})
+vim.keymap.set("n", "<leader>fs", current_buffer_fuzzy_find, {
+  desc = "Telescope current_buffer_fuzzy_find",
+  silent = true,
+})
+vim.keymap.set("n", "<leader>fh", help_tags, {
+  desc = "Telescope help_tags",
+  silent = true,
+})
+vim.keymap.set("n", "<leader>fc", dot_config, {
+  desc = "Telescope find_files in ~/.config",
+  silent = true,
+})
+vim.keymap.set("n", "<leader>fm", "<cmd>Telescope commands<cr>", {
+  desc = "Telescope commands",
+  silent = true,
+})
+vim.keymap.set("n", "<leader>t", command_t, {
+  desc = "Telescope find_files or git_files (if inside .git directory)",
+  silent = true,
+  expr = true,
+})
+
 return {
   {
     "nvim-telescope/telescope.nvim",
@@ -66,16 +88,7 @@ return {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope-fzy-native.nvim",
     },
-    keys = {
-      { "<leader>b",  buffers,                   silent = true, desc = "Telescope buffers" },
-      { "<leader>B",  oldfiles,                  silent = true, desc = "Telescope oldfiles" },
-      { "<leader>fg", live_grep,                 silent = true, desc = "Telescope live_grep" },
-      { "<leader>fs", current_buffer_fuzzy_find, silent = true, desc = "Telescope current_buffer_fuzzy_find" },
-      { "<leader>fh", help_tags,                 silent = true, desc = "Telescope help_tags" },
-      { "<leader>fc", dot_config,                silent = true, desc = "Telescope find_files in ~/.config" },
-      { "<leader>fm", commands,                  silent = true, desc = "Telescope commands" },
-      { "<leader>t",  command_t,                 silent = true, desc = "Telescope find_files or git_files (if inside .git directory)" },
-    },
+    event = "VeryLazy",
     config = function()
       local telescope = require("telescope")
       local actions = require("telescope.actions")

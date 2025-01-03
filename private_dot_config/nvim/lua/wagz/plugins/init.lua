@@ -7,6 +7,11 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.keymap.set("n", "<space>ss", "<cmd>Scratch<cr>", {
+  desc = "Open Scratch buffer",
+  silent = true,
+})
+
 return {
   {
     "folke/lazy.nvim",
@@ -59,13 +64,9 @@ return {
   },
   {
     "mtth/scratch.vim",
-    cmd = {
-      "Scratch",
-      "ScratchInsert",
-      "ScratchSelection",
-      "ScratchPreview",
-    },
+    event = "VeryLazy",
     init = function()
+      vim.g.scratch_no_mappings = 1
       vim.g.scratch_persistence_file = "~/.scratch.vim"
     end,
   },

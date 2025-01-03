@@ -1,9 +1,7 @@
+local is_floating_win = require("wagz.util").is_floating_win
+
 local function filetype_only()
   return vim.bo.filetype or ""
-end
-
-local function is_floating_win(winnr)
-  return vim.api.nvim_win_get_config(winnr).zindex and true or false
 end
 
 local function tabs_fmt(_, context)
@@ -11,7 +9,7 @@ local function tabs_fmt(_, context)
   if vim.api.nvim_tabpage_is_valid(context.tabnr) then
     local tab_winnrs = vim.tbl_filter(
       function(winnr)
-        return is_floating_win(winnr) and false or true
+        return not is_floating_win(winnr)
       end,
       vim.api.nvim_tabpage_list_wins(context.tabnr)
     )
@@ -27,7 +25,7 @@ local function tabs_filename_cond()
   local bufnr = vim.api.nvim_get_current_buf()
   local has_no_name = vim.fn.bufname(bufnr) == ""
   local has_no_file = vim.fn.expand("%:p") == ""
-  return (has_no_name or has_no_file) and false or true
+  return not (has_no_name or has_no_file)
 end
 
 return {
