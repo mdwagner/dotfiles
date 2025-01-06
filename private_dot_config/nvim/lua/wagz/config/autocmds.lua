@@ -84,10 +84,18 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("FileType", {
   group = require("wagz.util").augroup,
   desc = "Wrap and check for spell in text filetypes",
-  pattern = { "text", "plaintex", "markdown" },
+  pattern = { "text", "plaintex" },
   callback = function()
     vim.opt_local.wrap = true
     vim.opt_local.spell = true
+  end,
+})
+vim.api.nvim_create_autocmd("FileType", {
+  group = require("wagz.util").augroup,
+  desc = "Wrap text in markdown",
+  pattern = "markdown",
+  callback = function()
+    vim.opt_local.wrap = true
   end,
 })
 vim.api.nvim_create_autocmd("FileType", {
