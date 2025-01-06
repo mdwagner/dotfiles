@@ -2,79 +2,93 @@ vim.api.nvim_create_autocmd("LspAttach", {
   group = require("wagz.util").augroup,
   desc = "LSP actions",
   callback = function(event)
+    local client = vim.lsp.get_client_by_id(event.data.client_id)
+    if not client then return end
+
     -- default: 'omnifunc' is set to `vim.lsp.omnifunc()`
     --   i_CTRL-X_CTRL-O
-    -- default: 'tagfunc' is set to `vim.lsp.tagfunc()`
-    --   go-to-definition, :tjump, CTRL-], CTRL-W_], CTRL-W_}
+    --
+    -- default: 'tagfunc' is set to `vim.lsp.tagfunc()` for go-to-definition, :tjump
+    --   CTRL-], CTRL-W_], CTRL-W_}
+    --
+    -- default: 'formatexpr' is set to `vim.lsp.formatexpr()`
+    --   gq
+    --
     -- default: `K` is mapped to `vim.lsp.buf.hover()`
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
-      silent = true,
-      buffer = event.buf,
-      desc = "Jumps to the definition of the symbol under the cursor",
-    })
-    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {
-      silent = true,
-      buffer = event.buf,
-      desc = "Jumps to the declaration of the symbol under the cursor",
-    })
-    -- TODO: remove
-    vim.keymap.set("n", "gri", vim.lsp.buf.implementation, {
-      silent = true,
-      buffer = event.buf,
-      desc = "Lists all the implementations for the symbol under the cursor in the quickfix window",
-    })
-    vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, {
-      silent = true,
-      buffer = event.buf,
-      desc = "Jumps to the definition of the type of the symbol under the cursor",
-    })
-    -- TODO: remove
-    vim.keymap.set("n", "grr", vim.lsp.buf.references, {
-      silent = true,
-      buffer = event.buf,
-      desc = "Lists all the references to the symbol under the cursor in the quickfix window",
-    })
-    -- TODO: remove
-    vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, {
-      silent = true,
-      buffer = event.buf,
-      desc = "Displays signature information about the symbol under the cursor in a floating window",
-    })
-    -- TODO: remove
-    vim.keymap.set("n", "grn", vim.lsp.buf.rename, {
-      silent = true,
-      buffer = event.buf,
-      desc = "Renames all references to the symbol under the cursor",
-    })
-    -- default: `gq` is mapped to `vim.lsp.formatexpr()`
-    vim.keymap.set("n", "<space>f", vim.lsp.buf.format, {
-      silent = true,
-      buffer = event.buf,
-      desc = "Formats a buffer using the attached (and optionally filtered) language server clients",
-    })
-    -- TODO: remove
-    vim.keymap.set("n", "gra", vim.lsp.buf.code_action, {
-      silent = true,
-      buffer = event.buf,
-      desc = "Selects a code action available at the current cursor position",
-    })
-    -- TODO: remove
-    vim.keymap.set("n", "gO", vim.lsp.buf.document_symbol, {
-      silent = true,
-      buffer = event.buf,
-      desc = "Lists all symbols in the current buffer in the quickfix window",
-    })
+
+    -- Unset 'omnifunc' (using blink.cmp instead)
+    vim.bo[event.buf].omnifunc = nil
+
+    if client.supports_method("textDocument/typeDefinition", { bufnr = event.buf }) then
+      vim.keymap.set("n", "gd", vim.lsp.buf.type_definition, {
+        silent = true,
+        buffer = event.buf,
+        desc = "Jumps to the definition of the type of the symbol under the cursor",
+      })
+    end
+
+    if client.supports_method("textDocument/references", { bufnr = event.buf }) then
+      vim.keymap.set("n", "grr", vim.lsp.buf.references, {
+        silent = true,
+        buffer = event.buf,
+        desc = "Lists all the references to the symbol under the cursor in the quickfix window",
+      })
+    end
+
+    if client.supports_method("textDocument/rename", { bufnr = event.buf }) then
+      vim.keymap.set("n", "grn", vim.lsp.buf.rename, {
+        silent = true,
+        buffer = event.buf,
+        desc = "Renames all references to the symbol under the cursor",
+      })
+    end
+
+    if client.supports_method("textDocument/codeAction", { bufnr = event.buf }) then
+      vim.keymap.set("n", "gra", vim.lsp.buf.code_action, {
+        silent = true,
+        buffer = event.buf,
+        desc = "Selects a code action available at the current cursor position",
+      })
+    end
+
+    if client.supports_method("textDocument/documentSymbol", { bufnr = event.buf }) then
+      vim.keymap.set("n", "gO", vim.lsp.buf.document_symbol, {
+        silent = true,
+        buffer = event.buf,
+        desc = "Lists all symbols in the current buffer in the quickfix window",
+      })
+    end
+
+    if client.supports_method("textDocument/formatting", { bufnr = event.buf }) then
+      vim.keymap.set("n", "<leader>p", vim.lsp.buf.format, {
+        silent = true,
+        buffer = event.buf,
+        desc = "Formats a buffer using the attached language server client",
+      })
+    end
+
+    if client.supports_method("textDocument/signatureHelp", { bufnr = event.buf }) then
+      vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, {
+        silent = true,
+        buffer = event.buf,
+        desc = "Displays signature information about the symbol under the cursor in a floating window",
+      })
+    end
   end
 })
 
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-  -- Use a sharp border with `FloatBorder` highlights
-  border = "single",
-})
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-  -- Use a sharp border with `FloatBorder` highlights
-  border = "single",
-})
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+  vim.lsp.handlers.hover, {
+    -- Use a sharp border with `FloatBorder` highlights
+    border = "single",
+    -- Add the title in hover float window
+    title = "HOVER",
+  })
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+  vim.lsp.handlers.signature_help, {
+    -- Use a sharp border with `FloatBorder` highlights
+    border = "single",
+  })
 
 return {
   {
@@ -143,9 +157,6 @@ return {
         ctags_lsp = {
           filetypes = { "ruby" },
         },
-        -- ruby_lsp = {},
-        -- stimulus_ls = {},
-        -- tailwindcss = {},
       },
     },
     config = function(_, opts)

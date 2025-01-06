@@ -50,28 +50,28 @@ vim.keymap.set("n", "<leader>b", buffers, {
   desc = "Telescope buffers",
   silent = true,
 })
-vim.keymap.set("n", "<leader>fo", "<cmd>Telescope oldfiles<cr>", {
+vim.keymap.set("n", "<space>fo", "<cmd>Telescope oldfiles<cr>", {
   desc = "Telescope oldfiles",
   silent = true,
 })
-vim.keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", {
+vim.keymap.set("n", "<space>fg", "<cmd>Telescope live_grep<cr>", {
   desc = "Telescope live_grep",
   silent = true,
 })
-vim.keymap.set("n", "<leader>fs", current_buffer_fuzzy_find, {
+vim.keymap.set("n", "<space>ff", current_buffer_fuzzy_find, {
   desc = "Telescope current_buffer_fuzzy_find",
   silent = true,
 })
-vim.keymap.set("n", "<leader>fh", help_tags, {
+vim.keymap.set("n", "<space>fc", "<cmd>Telescope commands<cr>", {
+  desc = "Telescope commands",
+  silent = true,
+})
+vim.keymap.set("n", "<space>fh", help_tags, {
   desc = "Telescope help_tags",
   silent = true,
 })
-vim.keymap.set("n", "<leader>fc", dot_config, {
+vim.keymap.set("n", "<space>f.", dot_config, {
   desc = "Telescope find_files in ~/.config",
-  silent = true,
-})
-vim.keymap.set("n", "<leader>fm", "<cmd>Telescope commands<cr>", {
-  desc = "Telescope commands",
   silent = true,
 })
 vim.keymap.set("n", "<leader>t", command_t, {
