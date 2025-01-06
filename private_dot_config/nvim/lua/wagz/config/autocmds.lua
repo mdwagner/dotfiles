@@ -6,6 +6,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
     vim.opt_local.number = false
     vim.opt_local.relativenumber = false
     vim.opt_local.scrollback = 100000
+    vim.opt_local.wrap = true
   end,
 })
 vim.api.nvim_create_autocmd("TextYankPost", {
