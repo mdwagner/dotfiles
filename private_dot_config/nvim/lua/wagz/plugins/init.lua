@@ -7,8 +7,8 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-vim.keymap.set("n", "<space>ss", "<cmd>Scratch<cr>", {
-  desc = "Open Scratch buffer",
+vim.keymap.set("n", "<space>sc", "<cmd>Scratch<cr>", {
+  desc = "Open scratch buffer",
   silent = true,
 })
 
@@ -106,5 +106,13 @@ return {
         "terminal",
       },
     },
+  },
+  {
+    "sbdchd/neoformat",
+    event = "VeryLazy",
+    config = function()
+      vim.g.neoformat_try_node_exe = 1
+      vim.g.neoformat_only_msg_on_error = 1
+    end,
   },
 }

@@ -18,12 +18,19 @@ return {
       "rafamadriz/friendly-snippets",
       "Kaiser-Yang/blink-cmp-dictionary",
     },
-    version = "v0.*",
+    -- version = "v0.*",
+    branch = "main",
+    build = "mise x rust@nightly -- cargo build --release",
     opts = {
+      fuzzy = {
+        prebuilt_binaries = {
+          download = false, -- handled by build option above
+        },
+      },
       keymap = {
         preset = "none",
 
-        ["<CR>"] = { "accept", "fallback" },
+        ["<C-y>"] = { "accept", "fallback" },
         ["<C-e>"] = { "cancel", "fallback" },
         ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
 
@@ -41,7 +48,7 @@ return {
         cmdline = {
           preset = "none",
 
-          ["<CR>"] = { "accept", "fallback" },
+          ["<C-y>"] = { "accept" },
           ["<C-e>"] = { "cancel" },
 
           ["<C-n>"] = { "select_next" },
@@ -53,9 +60,14 @@ return {
       },
       completion = {
         list = {
-          selection = function(ctx)
-            return ctx.mode == "cmdline" and "manual" or "preselect"
-          end,
+          selection = {
+            preselect = function(ctx)
+              return ctx.mode ~= "cmdline"
+            end,
+            auto_insert = function(ctx)
+              return ctx.mode ~= "cmdline"
+            end,
+          },
         },
         menu = {
           border = "rounded",
@@ -98,6 +110,18 @@ return {
       },
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
+        cmdline = function()
+          local type = vim.fn.getcmdtype()
+          -- Search forward and backward
+          if type == "/" or type == "?" then
+            return { "buffer" }
+          end
+          -- Commands
+          if type == ":" or type == "@" then
+            return { "path", "cmdline" }
+          end
+          return {}
+        end,
         providers = {
           dictionary = {
             name = "dictionary",

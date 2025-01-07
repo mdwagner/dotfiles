@@ -12,7 +12,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     --   CTRL-], CTRL-W_], CTRL-W_}
     --
     -- default: 'formatexpr' is set to `vim.lsp.formatexpr()`
-    --   gq
+    --   n_gq, v_gq
     --
     -- default: `K` is mapped to `vim.lsp.buf.hover()`
 
@@ -64,6 +64,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
         silent = true,
         buffer = event.buf,
         desc = "Formats a buffer using the attached language server client",
+      })
+    else
+      vim.keymap.set("n", "<leader>p", "<cmd>Neoformat<cr>", {
+        silent = true,
+        buffer = event.buf,
+        desc = "Format the entire buffer, or visual selection of the buffer",
       })
     end
 

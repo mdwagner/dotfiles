@@ -12,29 +12,20 @@ return {
       view_options = {
         show_hidden = true,
         is_always_hidden = function(name, _)
-          local switch = {
-            ["."] = true,
-            [".."] = true,
-          }
-          return switch[name] or false
+          return name == "." or name == ".."
         end,
       },
       use_default_keymaps = false,
       keymaps = {
         ["g?"] = "actions.show_help",
+        ["gq"] = "actions.close",
+        ["-"] = "actions.parent",
         ["<CR>"] = "actions.select",
         ["<C-v>"] = "actions.select_vsplit",
         ["<C-x>"] = "actions.select_split",
         ["<C-t>"] = "actions.select_tab",
         ["<Tab>"] = "actions.preview",
-        ["gq"] = "actions.close",
         ["<leader>r"] = "actions.refresh",
-        ["-"] = "actions.parent",
-        ["_"] = "actions.open_cwd",
-        ["`"] = "actions.cd",
-        ["~"] = "actions.tcd",
-        ["gs"] = "actions.change_sort",
-        ["g."] = "actions.toggle_hidden",
         ["yp"] = "actions.copy_entry_path",
       },
     },
