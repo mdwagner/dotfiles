@@ -12,14 +12,6 @@ if type -sq nvim
   set -gx GIT_EDITOR (type -P nvim)
 end
 
-if test -S ~/.1password/agent.sock
-  set -gx SSH_AUTH_SOCK ~/.1password/agent.sock
-end
-
-if type -sq op
-  op completion fish | source
-end
-
 mkdir -p ~/.local/bin
 fish_add_path ~/.local/bin
 
@@ -29,4 +21,8 @@ if type -sq mise
   else
     mise activate fish --shims | source
   end
+end
+
+if test -e ./platform_config.fish
+  source ./platform_config.fish
 end
