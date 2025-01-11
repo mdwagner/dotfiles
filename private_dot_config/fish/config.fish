@@ -23,6 +23,6 @@ if type -sq mise
   end
 end
 
-if test -e ./platform_config.fish
-  source ./platform_config.fish
+if test -f ~/.config/fish/platform_config.fish
+  source ~/.config/fish/platform_config.fish
 end

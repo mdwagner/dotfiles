@@ -9,7 +9,7 @@ local function local_rails_handler(name, command)
     local channel_id = vim.fn.termopen(command, {
       on_exit = function(_, code)
         if code ~= 0 then
-          print(name .. " exited with code " .. code)
+          vim.notify(name .. " exited with code " .. code, vim.log.levels.ERROR)
         end
         current_jobs[name] = nil
       end
@@ -19,6 +19,18 @@ local function local_rails_handler(name, command)
     end
     vim.cmd("file " .. name)
     vim.cmd [[clo]]
+  end
+end
+
+local function close_terminal_by_channel(channel_id)
+  -- Iterate through all buffers
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    -- Check if the buffer is a terminal and matches the given channel ID
+    if vim.bo[buf].buftype == "terminal" and vim.b[buf].terminal_job_id == channel_id then
+      -- Delete the buffer
+      vim.api.nvim_buf_delete(buf, { force = true })
+      return
+    end
   end
 end
 
@@ -41,4 +53,18 @@ vim.api.nvim_create_user_command("LocalRailsAll", function()
   vim.cmd [[LocalRailsConsole]]
 end, {
   desc = "Start all local LocalRails* commands",
+})
+vim.api.nvim_create_user_command("LocalRailsKillAll", function()
+  for _, id in pairs(current_jobs) do
+    close_terminal_by_channel(id)
+  end
+end, {
+  desc = "Kill all local LocalRails* commands",
+})
+
+vim.api.nvim_create_user_command("LocalRspec", function()
+  vim.cmd [[te]]
+  vim.cmd [[file term-rsepc]]
+end, {
+  desc = "Start new terminal for rspec",
 })

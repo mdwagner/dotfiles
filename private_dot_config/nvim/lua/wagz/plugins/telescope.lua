@@ -28,13 +28,17 @@ end
 
 local function buf_delete(prompt_bufnr)
   local current_picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
+  local bufnrs = {}
   for _, entry in ipairs(current_picker:get_multi_selection()) do
     local bufnr = entry.bufnr
     if bufnr ~= nil then
-      vim.api.nvim_buf_delete(bufnr, { force = true })
+      table.insert(bufnrs, bufnr)
     end
   end
   require("telescope.actions").close(prompt_bufnr)
+  for _, bufnr in ipairs(bufnrs) do
+    vim.api.nvim_buf_delete(bufnr, { force = true })
+  end
 end
 
 vim.api.nvim_create_autocmd("User", {
@@ -42,7 +46,7 @@ vim.api.nvim_create_autocmd("User", {
   desc = "Wrap Telescope previewer",
   pattern = "TelescopePreviewerLoaded",
   callback = function()
-    vim.opt_local.wrap = true
+    vim.wo.wrap = true
   end,
 })
 
@@ -95,6 +99,7 @@ return {
 
       telescope.setup({
         defaults = {
+          wrap_results = true,
           mappings = {
             i = {
               ["<ESC>"] = actions.close,
