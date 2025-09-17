@@ -1,24 +1,11 @@
-local is_floating_win = require("wagz.util").is_floating_win
+-- local is_floating_win = require("wagz.util").is_floating_win
 
 local function filetype_only()
   return vim.bo.filetype or ""
 end
 
 local function tabs_fmt(_, context)
-  local name = string.format("%i", context.tabnr)
-  if vim.api.nvim_tabpage_is_valid(context.tabnr) then
-    local tab_winnrs = vim.tbl_filter(
-      function(winnr)
-        return not is_floating_win(winnr)
-      end,
-      vim.api.nvim_tabpage_list_wins(context.tabnr)
-    )
-    local count = #tab_winnrs
-    if count > 1 then
-      return string.format("%s (%i)", name, count)
-    end
-  end
-  return name
+  return string.format("%i", context.tabnr)
 end
 
 local function tabs_filename_cond()

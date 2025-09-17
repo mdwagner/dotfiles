@@ -1,3 +1,7 @@
+local function format()
+  require("conform").format({ async = true })
+end
+
 vim.api.nvim_create_autocmd("FileType", {
   group = require("wagz.util").augroup,
   desc = "Don't show git* filetypes in buffer list",
@@ -5,11 +9,6 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.opt.bufhidden = "delete"
   end,
-})
-
-vim.keymap.set("n", "<space>sc", "<cmd>Scratch<cr>", {
-  desc = "Open scratch buffer",
-  silent = true,
 })
 
 return {
@@ -46,29 +45,10 @@ return {
     },
   },
   {
-    "vim-crystal/vim-crystal",
-    ft = { "crystal", "ecrystal" },
-  },
-  {
     "lewis6991/gitsigns.nvim",
     opts = {
       signs_staged_enable = false,
     },
-  },
-  {
-    "alker0/chezmoi.vim",
-    lazy = false,
-    init = function()
-      vim.g["chezmoi#use_tmp_buffer"] = true -- required
-    end,
-  },
-  {
-    "mtth/scratch.vim",
-    event = "VeryLazy",
-    init = function()
-      vim.g.scratch_no_mappings = 1
-      vim.g.scratch_persistence_file = "~/.scratch.vim"
-    end,
   },
   {
     "OXY2DEV/foldtext.nvim",
@@ -96,23 +76,34 @@ return {
     },
   },
   {
-    "chrisgrieser/nvim-early-retirement",
-    event = "VeryLazy",
+    "stevearc/conform.nvim",
+    keys = {
+      { "<leader>p", format, desc = "Format buffer" }
+    },
     opts = {
-      retirementAgeMins = 45,
-      minimumBufferNum = 30,
-      notificationOnAutoClose = true,
-      ignoredFiletypes = {
-        "terminal",
+      formatters_by_ft = {
+        lua = { "stylua" },
+        ruby = { "rubocop" },
+        javascript = { "prettier" },
+        typescript = { "prettier" },
+        html = { "prettier" },
+        eruby = { "htmlbeautifier" },
+        css = { "prettier" },
+        scss = { "prettier" },
+        sass = { "prettier" },
+        json = { "prettier" },
+        markdown = { "prettier" },
+        yaml = { "prettier" },
+        sh = { "shfmt" },
+        bash = { "shfmt" },
+        awk = { "gawk" },
+      },
+      default_format_opts = {
+        lsp_format = "fallback",
       },
     },
-  },
-  {
-    "sbdchd/neoformat",
-    event = "VeryLazy",
-    config = function()
-      vim.g.neoformat_try_node_exe = 1
-      vim.g.neoformat_only_msg_on_error = 1
+    init = function()
+      vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
     end,
   },
 }

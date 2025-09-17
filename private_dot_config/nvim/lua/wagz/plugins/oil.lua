@@ -5,9 +5,6 @@ return {
       default_file_explorer = true,
       columns = {
         "icon",
-        --"permissions", -- file permissions
-        --"mtime",       -- modified_at (file contents)
-        --"type",
       },
       view_options = {
         show_hidden = true,

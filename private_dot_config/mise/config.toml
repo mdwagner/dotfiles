@@ -1,4 +1,5 @@
 [settings]
+idiomatic_version_file_enable_tools = ["ruby", "node"]
 experimental = true
 
 [settings.npm]
@@ -7,7 +8,7 @@ bun = true
 [tools]
 bun = "latest"
 deno = "latest"
-node = "latest"
+node = "22.3.0"
 "npm:prettier" = "latest"
 "npm:bash-language-server" = "latest"
 "npm:emmet-ls" = "latest"
@@ -16,15 +17,22 @@ node = "latest"
 "npm:typescript" = "latest"
 "npm:vim-language-server" = "latest"
 "npm:vscode-langservers-extracted" = "latest"
-
 ruby = "3.2.2"
 "gem:bundler" = "latest"
-
 python = "latest"
 uv = "latest"
 "pipx:ansible-core" = { version = "latest", uvx_args = "--with ansible" }
-
 rust = "latest"
-"cargo:tree-sitter-cli" = "latest"
-
+"cargo:tree-sitter-cli" = "0.24.6"
 "lua-language-server" = "latest"
+crystal = "latest"
+neovim = "0.10.2"
+zig = "latest"
+go = "1.21.2"
+usage = "latest"
+watchexec = "latest"
+yarn = "1.22"
+"go:github.com/netmute/ctags-lsp" = "latest"
+"npm:@tailwindcss/language-server" = "latest"
+"npm:stimulus-language-server" = "latest"
+"aqua:twpayne/chezmoi" = "latest"

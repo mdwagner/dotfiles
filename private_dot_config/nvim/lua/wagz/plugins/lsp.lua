@@ -59,20 +59,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
       })
     end
 
-    if client.supports_method("textDocument/formatting", { bufnr = event.buf }) then
-      vim.keymap.set("n", "<leader>p", vim.lsp.buf.format, {
-        silent = true,
-        buffer = event.buf,
-        desc = "Formats a buffer using the attached language server client",
-      })
-    else
-      vim.keymap.set("n", "<leader>p", "<cmd>Neoformat<cr>", {
-        silent = true,
-        buffer = event.buf,
-        desc = "Format the entire buffer, or visual selection of the buffer",
-      })
-    end
-
     if client.supports_method("textDocument/signatureHelp", { bufnr = event.buf }) then
       vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, {
         silent = true,
@@ -83,18 +69,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end
 })
 
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-  vim.lsp.handlers.hover, {
-    -- Use a sharp border with `FloatBorder` highlights
-    border = "single",
-    -- Add the title in hover float window
-    title = "HOVER",
-  })
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
-  vim.lsp.handlers.signature_help, {
-    -- Use a sharp border with `FloatBorder` highlights
-    border = "single",
-  })
+vim.lsp.handlers["textDocument/hover"] =
+  vim.lsp.with(vim.lsp.handlers.hover, { border = "single", title = "HOVER" })
+
+vim.lsp.handlers["textDocument/signatureHelp"] =
+  vim.lsp.with(vim.lsp.handlers.signature_help, { border = "single" })
 
 return {
   {
@@ -107,17 +86,18 @@ return {
       servers = {
         bashls = {},
         crystalline = {},
-        cssls = {},
-        denols = {
-          autostart = false,
+        cssls = {
+          settings = {
+            css = { validate = false },
+            scss = { validate = false },
+            less = { validate = false },
+          },
         },
         emmet_ls = {
           filetypes = {
             "html",
             "eruby",
             "css",
-            "typescriptreact",
-            "javascriptreact",
             "sass",
             "scss",
           },
@@ -159,7 +139,6 @@ return {
         },
         vimls = {},
         zls = {},
-        standardrb = {},
         ctags_lsp = {
           filetypes = { "ruby" },
         },
@@ -171,6 +150,19 @@ return {
         config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
         lspconfig[server].setup(config)
       end
+
+      -- vim.lsp.config("*", {
+      --   capabilities = require("blink.cmp").get_lsp_capabilities(),
+      -- })
+      --
+      -- for name, config in pairs(opts.servers) do
+      --   config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
+      --   vim.lsp.config(name, config)
+      -- end
+      --
+      -- for name, _ in pairs(opts.servers) do
+      --   vim.lsp.enable(name)
+      -- end
     end,
   },
 }

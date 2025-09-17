@@ -3,6 +3,17 @@ vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 
 return {
+  -- {
+  --   "nvim-treesitter/nvim-treesitter",
+  --   lazy = false,
+  --   branch = "main",
+  --   build = ":TSUpdate",
+  --   init = function()
+  --     local ensure_installed = {}
+  --     local max_wait_ms = 300000 -- 5 mins
+  --     require("nvim-treesitter").install(ensure_installed):wait(max_wait_ms)
+  --   end,
+  -- },
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
@@ -43,15 +54,24 @@ return {
         "toml",
         "zig",
         "kdl",
-        "earthfile",
+        "rbs",
       },
       highlight = {
         enable = true,
-        additional_vim_regex_highlighting = false,
+        additional_vim_regex_highlighting = true,
       },
       indent = {
         enable = false,
       },
     },
+  },
+  {
+    "vim-crystal/vim-crystal",
+    ft = { "crystal", "ecrystal" },
+  },
+  {
+    "earthly/earthly.vim",
+    branch = "main",
+    ft = { "Earthfile" },
   },
 }

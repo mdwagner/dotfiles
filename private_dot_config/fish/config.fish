@@ -23,6 +23,10 @@ if type -sq mise
   end
 end
 
-if test -f ~/.config/fish/platform_config.fish
-  source ~/.config/fish/platform_config.fish
+if test -S ~/.1password/agent.sock
+  set -gx SSH_AUTH_SOCK ~/.1password/agent.sock
+end
+
+if type -sq op
+  op completion fish | source
 end

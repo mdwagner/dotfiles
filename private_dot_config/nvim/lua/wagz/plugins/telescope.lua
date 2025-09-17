@@ -46,7 +46,7 @@ vim.api.nvim_create_autocmd("User", {
   desc = "Wrap Telescope previewer",
   pattern = "TelescopePreviewerLoaded",
   callback = function()
-    vim.wo.wrap = true
+    vim.opt_local.wrap = true
   end,
 })
 
@@ -99,7 +99,6 @@ return {
 
       telescope.setup({
         defaults = {
-          wrap_results = true,
           mappings = {
             i = {
               ["<ESC>"] = actions.close,
