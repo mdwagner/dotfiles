@@ -6,6 +6,8 @@ return {
     "nvim-mini/mini.icons",
     {
       "folke/snacks.nvim",
+      priority = 1000,
+      lazy = false,
       opts = {
         image = {
           -- your image configuration comes here
