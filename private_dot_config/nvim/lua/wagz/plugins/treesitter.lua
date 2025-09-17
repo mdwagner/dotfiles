@@ -3,23 +3,13 @@ vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 
 return {
-  -- {
-  --   "nvim-treesitter/nvim-treesitter",
-  --   lazy = false,
-  --   branch = "main",
-  --   build = ":TSUpdate",
-  --   init = function()
-  --     local ensure_installed = {}
-  --     local max_wait_ms = 300000 -- 5 mins
-  --     require("nvim-treesitter").install(ensure_installed):wait(max_wait_ms)
-  --   end,
-  -- },
   {
     "nvim-treesitter/nvim-treesitter",
+    lazy = false,
+    branch = "main",
     build = ":TSUpdate",
-    main = "nvim-treesitter.configs",
-    opts = {
-      ensure_installed = {
+    init = function()
+      local ensure_installed = {
         "bash",
         "css",
         "fish",
@@ -55,15 +45,9 @@ return {
         "zig",
         "kdl",
         "rbs",
-      },
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = true,
-      },
-      indent = {
-        enable = false,
-      },
-    },
+      }
+      require("nvim-treesitter").install(ensure_installed, { summary = false })
+    end,
   },
   {
     "vim-crystal/vim-crystal",

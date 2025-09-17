@@ -22,9 +22,7 @@ return {
   },
   {
     "tpope/vim-fugitive",
-    cmd = {
-      "Git",
-    },
+    cmd = "Git"
   },
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -54,23 +52,28 @@ return {
     "OXY2DEV/foldtext.nvim",
     lazy = false,
     opts = {
-      -- |  def derp(a, b) # 3 lines
-      default = {
-        {
-          type = "custom",
-          handler = function(_, bufnr)
-            local line = table.concat(vim.fn.getbufline(bufnr, vim.v.foldstart))
-            return { line, "Title" }
-          end,
-        },
-        {
-          type = "raw",
-          text = " # ",
-          hl = "Comment",
-        },
-        {
-          type = "fold_size",
-          postfix = " lines",
+      styles = {
+        -- |  def derp(a, b) # 3 lines
+        default = {
+          {
+            kind = "section",
+            output = function(bufnr, _)
+              local line = table.concat(vim.fn.getbufline(bufnr, vim.v.foldstart))
+              return {
+                { line, "Title" },
+              }
+            end,
+          },
+          {
+            kind = "section",
+            output = {
+              { " # ", "Comment" },
+            },
+          },
+          {
+            kind = "fold_size",
+            padding_right = " lines",
+          },
         },
       },
     },

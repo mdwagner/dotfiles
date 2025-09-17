@@ -1,5 +1,3 @@
--- local is_floating_win = require("wagz.util").is_floating_win
-
 local function filetype_only()
   return vim.bo.filetype or ""
 end

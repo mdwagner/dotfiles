@@ -145,24 +145,18 @@ return {
       },
     },
     config = function(_, opts)
-      local lspconfig = require("lspconfig")
-      for server, config in pairs(opts.servers) do
+      vim.lsp.config("*", {
+        capabilities = require("blink.cmp").get_lsp_capabilities(),
+      })
+
+      for name, config in pairs(opts.servers) do
         config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
-        lspconfig[server].setup(config)
+        vim.lsp.config(name, config)
       end
 
-      -- vim.lsp.config("*", {
-      --   capabilities = require("blink.cmp").get_lsp_capabilities(),
-      -- })
-      --
-      -- for name, config in pairs(opts.servers) do
-      --   config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
-      --   vim.lsp.config(name, config)
-      -- end
-      --
-      -- for name, _ in pairs(opts.servers) do
-      --   vim.lsp.enable(name)
-      -- end
+      for name, _ in pairs(opts.servers) do
+        vim.lsp.enable(name)
+      end
     end,
   },
 }
